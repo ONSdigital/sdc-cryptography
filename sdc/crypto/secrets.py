@@ -8,33 +8,33 @@ def validate_required_secrets(secrets, expected_secrets=[], key_purpose="submiss
         if required_secret not in secrets['secrets']:
             raise Exception("Missing Secret [{}]".format(required_secret))
 
-    validate_required_submission_keys(secrets, key_purpose)
+    validate_required_keys(secrets, key_purpose)
 
 
-def validate_required_submission_keys(secrets, key_purpose):
-    found_submission_public = False
-    found_submission_private = False
+def validate_required_keys(secrets, key_purpose):
+    found_public = False
+    found_private = False
 
     for kid in secrets['keys']:
         key = secrets['keys'][kid]
         if key['purpose'] == key_purpose:
             if key['type'] == 'public':
-                if found_submission_public:
-                    raise Exception("Multiple public submission keys loaded")
+                if found_public:
+                    raise Exception("Multiple public keys loaded for the same purpose")
                 else:
-                    found_submission_public = True
+                    found_public = True
 
             if key['type'] == 'private':
-                if found_submission_private:
-                    raise Exception("Multiple private submission keys loaded")
+                if found_private:
+                    raise Exception("Multiple private keys loaded for the same purpose")
                 else:
-                    found_submission_private = True
+                    found_private = True
 
-    if not found_submission_public:
-        raise Exception("No public submission key loaded")
+    if not found_public:
+        raise Exception("No public key loaded")
 
-    if not found_submission_private:
-        raise Exception("No private submission key loaded")
+    if not found_private:
+        raise Exception("No private key loaded")
 
 
 class Key:
