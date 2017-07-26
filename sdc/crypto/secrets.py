@@ -77,4 +77,9 @@ class SecretStore:
             return key
 
     def get_key_for_purpose_and_type(self, purpose, key_type):
-        return [key for key in self.keys.values() if key.purpose == purpose and key.key_type == key_type][:1]
+        key = [key for key in self.keys.values() if key.purpose == purpose and key.key_type == key_type]
+        try:
+            return key[0]
+        except IndexError:
+            return None
+
