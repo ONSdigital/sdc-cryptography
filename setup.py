@@ -56,5 +56,6 @@ setup(
         "console_scripts": [
         ],
     },
+    namespace_packages=["sdc"],
     zip_safe=False
 )

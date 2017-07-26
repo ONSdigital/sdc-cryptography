@@ -266,7 +266,7 @@ class TestTokenHelper(TestCase):  # pylint: disable=too-many-public-methods
         header = base64.urlsafe_b64encode(b'{"alg":"RS256", "kid":"UNKNOWN", "typ":"JWT"}')
         jwt = header.decode() + "." + jwtio_payload + "." + jwtio_signature
 
-        self.assert_in_decode_signed_jwt_exception(jwt, "Invalid Public Key Identifier")
+        self.assert_in_decode_signed_jwt_exception(jwt, "Invalid public Key Identifier")
 
     def test_signature_not_2048_bits(self):
         jwt = jwtio_header + "." + jwtio_payload + "." + base64.urlsafe_b64encode(os.urandom(255)).decode()

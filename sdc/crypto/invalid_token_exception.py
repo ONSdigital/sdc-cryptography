@@ -1,7 +1,6 @@
 
 class InvalidTokenException(Exception):
-    def __init__(self, value):
-        super().__init__()
+    def __init__(self, value="This token is invalid"):
         self.value = value
 
     def __str__(self):

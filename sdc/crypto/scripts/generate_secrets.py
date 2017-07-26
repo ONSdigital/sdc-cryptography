@@ -1,30 +1,31 @@
 #!/usr/bin/env python
 
-import os
-import yaml
-
 import hashlib
+import os
 
-from yaml.representer import SafeRepresenter
 from cryptography.hazmat.backends.openssl.backend import backend
 from cryptography.hazmat.primitives.serialization import load_pem_private_key, Encoding, PublicFormat
+import yaml
+from yaml.representer import SafeRepresenter
 
 
-# This script generates a yml file in the following format.
-# It is made up of two parts. string secrets (passwords) and keys (public and private)
-# keys:
-#   1234567890123456789012345678901234567890:
-#     purpose: submission
-#     type: public
-#     value: |
-#       -----BEGIN PUBLIC KEY-----
-#       #######################
-#       -----END PUBLIC KEY-----
-# secrets:
-#   PASSWORD: 'secret_value'
+'''
+ This script generates a yml file in the following format.
+ It is made up of two parts, string secrets (passwords) and keys (public and private) keys:
+  1234567890123456789012345678901234567890:
+    purpose: submission
+    type: public
+    value: |
+      -----BEGIN PUBLIC KEY-----
+      #######################
+      -----END PUBLIC KEY-----
+    secrets:
+        PASSWORD: 'secret_value'
+'''
 
 
 class LiteralUnicode(str):
+    # Needed to ensure that the yaml file has the private/public keys formatted correctly
     pass
 
 

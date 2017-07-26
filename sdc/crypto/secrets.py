@@ -1,6 +1,9 @@
 from jwcrypto import jwk
+from structlog import get_logger
 
 from sdc.crypto.invalid_token_exception import InvalidTokenException
+
+logger = get_logger()
 
 
 def validate_required_secrets(secrets, expected_secrets=[], key_purpose="submission"):
@@ -12,29 +15,26 @@ def validate_required_secrets(secrets, expected_secrets=[], key_purpose="submiss
 
 
 def validate_required_keys(secrets, key_purpose):
-    found_public = False
-    found_private = False
 
-    for kid in secrets['keys']:
+    def has_purpose_and_type(kid, key_type):
         key = secrets['keys'][kid]
-        if key['purpose'] == key_purpose:
-            if key['type'] == 'public':
-                if found_public:
-                    raise Exception("Multiple public keys loaded for the same purpose")
-                else:
-                    found_public = True
+        return key['purpose'] == key_purpose and key['type'] == key_type
 
-            if key['type'] == 'private':
-                if found_private:
-                    raise Exception("Multiple private keys loaded for the same purpose")
-                else:
-                    found_private = True
+    public_keys = [kid for kid in secrets['keys'] if has_purpose_and_type(kid, "public")]
 
-    if not found_public:
+    private_keys = [kid for kid in secrets['keys'] if has_purpose_and_type(kid, "private")]
+
+    if len(private_keys) > 1:
+        raise Exception("Multiple private keys loaded for the same purpose")
+
+    if len(public_keys) > 1:
+        raise Exception("Multiple public keys loaded for the same purpose")
+
+    if not public_keys:
         raise Exception("No public key loaded")
 
-    if not found_private:
-        raise Exception("No private key loaded")
+    if not private_keys:
+        Exception("No private key loaded")
 
 
 class Key:
@@ -51,34 +51,30 @@ class Key:
 class SecretStore:
     def __init__(self, secrets):
         self.secrets = secrets.get('secrets')
-        if 'keys' in secrets:
-            self.keys = {}
-            for _, kid in enumerate(secrets['keys']):
-                key = secrets['keys'][kid]
-                key_object = Key(kid, key['purpose'], key['type'], key['value'])
-                self.keys[kid] = key_object
+        try:
+            self.keys = {kid: Key(kid, key['purpose'], key['type'], key['value']) for kid, key in secrets['keys'].items()}
+        except KeyError as e:
+            logger.warning("Missing mandatory key values", error=str(e))
+            raise Exception(e)
 
     def get_secret_by_name(self, secret_name):
         return self.secrets.get(secret_name)
 
     def get_private_key_by_kid(self, purpose, kid):
-        if kid in self.keys:
-            key = self.keys[kid]
-            if key.purpose == purpose and key.key_type == 'private':
-                return key
-
-        raise InvalidTokenException("Invalid Private Key Identifier [{}] for Purpose [{}]".format(kid, purpose))
+        return self.get_key_by_kid(purpose, kid, "private")
 
     def get_public_key_by_kid(self, purpose, kid):
-        if kid in self.keys:
-            key = self.keys[kid]
-            if key.purpose == purpose and key.key_type == 'public':
-                return key
+        return self.get_key_by_kid(purpose, kid, "public")
 
-        raise InvalidTokenException("Invalid Public Key Identifier [{}] for Purpose [{}]".format(kid, purpose))
+    def get_key_by_kid(self, purpose, kid, key_type):
+        try:
+            key = self.keys[kid]
+            if key.purpose != purpose or key.key_type != key_type:
+                raise InvalidTokenException
+        except(KeyError, InvalidTokenException):
+            raise InvalidTokenException("Invalid {} Key Identifier [{}] for Purpose [{}]".format(key_type, kid, purpose))
+        else:
+            return key
 
     def get_key_for_purpose_and_type(self, purpose, key_type):
-        for _, kid in enumerate(self.keys):
-            key = self.keys[kid]
-            if key.purpose == purpose and key.key_type == key_type:
-                return key
+        return [key for key in self.keys.values() if key.purpose == purpose and key.key_type == key_type][:1]
