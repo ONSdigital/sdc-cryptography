@@ -82,4 +82,3 @@ class SecretStore:
             return key[0]
         except IndexError:
             return None
-

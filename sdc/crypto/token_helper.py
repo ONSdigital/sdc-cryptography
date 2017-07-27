@@ -32,6 +32,8 @@ def decrypt_jwe(encrypted_token, secret_store, purpose):
 
 def encrypt_jwe(payload, kid, secret_store, purpose, alg="RSA-OAEP", enc="A256GCM"):
 
+    logger.info("Encrypting JWE", kid=kid)
+
     public_jwk = secret_store.get_public_key_by_kid(purpose, kid).as_jwk()
 
     protected_header = {
@@ -73,6 +75,8 @@ def decode_jwt(jwt_token, secret_store, purpose, leeway=None, check_claims={}):
 
 
 def encode_jwt(claims, kid, secret_store, purpose):
+    logger.info("Encoding JWT", kid=kid)
+
     private_jwk = secret_store.get_private_key_by_kid(purpose, kid).as_jwk()
 
     header = {
