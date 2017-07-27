@@ -31,10 +31,10 @@ def validate_required_keys(secrets, key_purpose):
         raise Exception("Multiple public keys loaded for the purpose {}".format(key_purpose))
 
     if not public_keys:
-        raise Exception("No public key loaded")
+        raise Exception("No public key loaded for purpose {}".format(key_purpose))
 
     if not private_keys:
-        Exception("No private key loaded")
+        Exception("No private key loaded for purpose {}".format(key_purpose))
 
 
 class Key:
