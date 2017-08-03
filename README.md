@@ -29,7 +29,7 @@ from sdc.crypto.utils.generate_secrets import generate_secrets_file
 # Generate secrets file
 keys = {}
 secrets = {}
-generate_secrets_file(keys, secrets))
+generate_secrets_file(keys, secrets)
 
 # Load generated secrest file and create secret store
 import yaml
@@ -50,9 +50,9 @@ example below.
 from sdc.crypto.encrypter import encrypt
 encrypted_json = encrypt(json, secret_store, key_purpose)
 
-# Decrypt UTF8 data blob
+# Decrypt UTF8 jwe token
 from sdc.crypto.decrypter import decrypt
-data_bytes = request.data.decode('UTF8')
+data_bytes = data.decode('UTF8')
 decrypted_json = decrypt(data_bytes, secret_store, key_purpose)
 
 ```
