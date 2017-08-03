@@ -1,5 +1,5 @@
 from sdc.crypto.invalid_token_exception import InvalidTokenException
-from sdc.crypto.token_helper import decrypt_jwe, decode_jwt
+from sdc.crypto.token_helper import JWTHelper, JWEHelper
 
 
 def decrypt(token, key_store, key_purpose, leeway=120):
@@ -17,8 +17,8 @@ def decrypt(token, key_store, key_purpose, leeway=120):
     if len(tokens) != 5:
         raise InvalidTokenException("Incorrect number of tokens")
 
-    decrypted_token = decrypt_jwe(token, key_store, key_purpose)
+    decrypted_token = JWEHelper.decrypt(token, key_store, key_purpose)
 
-    payload = decode_jwt(decrypted_token, key_store, key_purpose, leeway)
+    payload = JWTHelper.decode(decrypted_token, key_store, key_purpose, leeway)
 
     return payload

@@ -1,4 +1,4 @@
-from sdc.crypto.token_helper import encode_jwt, encrypt_jwe
+from sdc.crypto.token_helper import JWTHelper, JWEHelper
 
 
 def encrypt(json, key_store, key_purpose):
@@ -12,9 +12,8 @@ def encrypt(json, key_store, key_purpose):
     """
     jwt_key = key_store.get_key_for_purpose_and_type(key_purpose, "private")
 
-
-    payload = encode_jwt(json, jwt_key.kid, key_store, key_purpose)
+    payload = JWTHelper.encode(json, jwt_key.kid, key_store, key_purpose)
 
     jwe_key = key_store.get_key_for_purpose_and_type(key_purpose, "public")
 
-    return encrypt_jwe(payload, jwe_key.kid, key_store, key_purpose)
+    return JWEHelper.encrypt(payload, jwe_key.kid, key_store, key_purpose)
