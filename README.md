@@ -31,7 +31,7 @@ keys = {}
 secrets = {}
 generate_secrets_file(keys, secrets)
 
-# Load generated secrest file and create secret store
+# Load generated secret file and create secret store
 import yaml
 EXPECTED_SECRETS = []
 key_purpose = 'key_purpose'
