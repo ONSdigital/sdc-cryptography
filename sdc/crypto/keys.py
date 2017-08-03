@@ -6,14 +6,6 @@ from sdc.crypto.invalid_token_exception import InvalidTokenException
 logger = get_logger()
 
 
-def validate_required_secrets(secrets, expected_secrets=[], key_purpose="submission"):
-    for required_secret in expected_secrets:
-        if required_secret not in secrets['secrets']:
-            raise Exception("Missing Secret [{}]".format(required_secret))
-
-    validate_required_keys(secrets, key_purpose)
-
-
 def validate_required_keys(secrets, key_purpose):
 
     def has_purpose_and_type(kid, key_type):
@@ -48,17 +40,13 @@ class Key:
         return jwk.JWK.from_pem(self.value.encode('utf-8'))
 
 
-class SecretStore:
+class KeyStore:
     def __init__(self, secrets):
-        self.secrets = secrets.get('secrets')
         try:
             self.keys = {kid: Key(kid, key['purpose'], key['type'], key['value']) for kid, key in secrets['keys'].items()}
         except KeyError as e:
             logger.warning("Missing mandatory key values", error=str(e))
             raise Exception(e)
-
-    def get_secret_by_name(self, secret_name):
-        return self.secrets.get(secret_name)
 
     def get_private_key_by_kid(self, purpose, kid):
         return self.get_key_by_kid(purpose, kid, "private")

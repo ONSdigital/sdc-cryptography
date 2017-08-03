@@ -12,7 +12,7 @@ from sdc.crypto.invalid_token_exception import InvalidTokenException
 logger = get_logger()
 
 
-def decrypt_jwe(encrypted_token, secret_store, purpose):
+def decrypt_jwe(encrypted_token, key_store, purpose):
     try:
         jwe_token = jwe.JWE(algs=['RSA-OAEP', 'A256GCM'])
         jwe_token.deserialize(encrypted_token)
@@ -21,7 +21,7 @@ def decrypt_jwe(encrypted_token, secret_store, purpose):
 
         logger.info("Decrypting JWE", kid=jwe_kid)
 
-        private_jwk = secret_store.get_private_key_by_kid(purpose, jwe_kid).as_jwk()
+        private_jwk = key_store.get_private_key_by_kid(purpose, jwe_kid).as_jwk()
 
         jwe_token.decrypt(private_jwk)
 
@@ -30,11 +30,11 @@ def decrypt_jwe(encrypted_token, secret_store, purpose):
         raise InvalidTokenException(repr(e))
 
 
-def encrypt_jwe(payload, kid, secret_store, purpose, alg="RSA-OAEP", enc="A256GCM"):
+def encrypt_jwe(payload, kid, key_store, purpose, alg="RSA-OAEP", enc="A256GCM"):
 
     logger.info("Encrypting JWE", kid=kid)
 
-    public_jwk = secret_store.get_public_key_by_kid(purpose, kid).as_jwk()
+    public_jwk = key_store.get_public_key_by_kid(purpose, kid).as_jwk()
 
     protected_header = {
         "alg": alg,
@@ -49,13 +49,13 @@ def encrypt_jwe(payload, kid, secret_store, purpose, alg="RSA-OAEP", enc="A256GC
     return token.serialize(compact=True)
 
 
-def decode_jwt(jwt_token, secret_store, purpose, leeway=None, check_claims={}):
+def decode_jwt(jwt_token, key_store, purpose, leeway=None, check_claims={}):
     try:
         jwt_kid = extract_kid_from_header(jwt_token)
 
         logger.info("Decoding JWT", kid=jwt_kid)
 
-        public_jwk = secret_store.get_public_key_by_kid(purpose, jwt_kid).as_jwk()
+        public_jwk = key_store.get_public_key_by_kid(purpose, jwt_kid).as_jwk()
 
         signed_token = jwt.JWT(algs=['RS256'], check_claims=check_claims)
 
@@ -74,10 +74,10 @@ def decode_jwt(jwt_token, secret_store, purpose, leeway=None, check_claims={}):
         raise InvalidTokenException(repr(e))
 
 
-def encode_jwt(claims, kid, secret_store, purpose):
+def encode_jwt(claims, kid, key_store, purpose):
     logger.info("Encoding JWT", kid=kid)
 
-    private_jwk = secret_store.get_private_key_by_kid(purpose, kid).as_jwk()
+    private_jwk = key_store.get_private_key_by_kid(purpose, kid).as_jwk()
 
     header = {
         'kid': kid,

@@ -3,7 +3,7 @@ import os
 from unittest import TestCase
 
 from sdc.crypto.invalid_token_exception import InvalidTokenException
-from sdc.crypto.secrets import SecretStore
+from sdc.crypto.keys import KeyStore
 from sdc.crypto.token_helper import decrypt_jwe, decode_jwt
 from sdc.crypto.test import VALID_JWE, TEST_DO_NOT_USE_UPSTREAM_PUBLIC_PEM, TEST_DO_NOT_USE_SR_PRIVATE_PEM, \
     VALID_SIGNED_JWT, TEST_DO_NOT_USE_UPSTREAM_PRIVATE_KEY, TEST_DO_NOT_USE_SR_PUBLIC_KEY
@@ -40,7 +40,7 @@ class TestTokenHelper(TestCase):  # pylint: disable=too-many-public-methods
     }
 
     def setUp(self):
-        self.secret_store = SecretStore({
+        self.key_store = KeyStore({
             "keys": {
                 "e19091072f920cbf3ca9f436ceba309e7d814a62": {'purpose': KEY_PURPOSE_AUTHENTICATION,
                                                              'type': 'private',
@@ -65,7 +65,7 @@ class TestTokenHelper(TestCase):  # pylint: disable=too-many-public-methods
         )
 
     def test_decrypt_jwe_valid(self):
-        token = decrypt_jwe(VALID_JWE, self.secret_store, KEY_PURPOSE_AUTHENTICATION)
+        token = decrypt_jwe(VALID_JWE, self.key_store, KEY_PURPOSE_AUTHENTICATION)
         self.assertEqual(VALID_SIGNED_JWT, token)
 
     def test_decrypt_jwe_does_not_contain_four_instances_of_full_stop(self):
@@ -145,7 +145,7 @@ class TestTokenHelper(TestCase):  # pylint: disable=too-many-public-methods
 
     def assert_in_decrypt_exception(self, jwe, error):
         with self.assertRaises(InvalidTokenException) as ite:
-            decrypt_jwe(jwe, self.secret_store, KEY_PURPOSE_AUTHENTICATION)
+            decrypt_jwe(jwe, self.key_store, KEY_PURPOSE_AUTHENTICATION)
 
         if error not in ite.exception.value:
             raise AssertionError(
@@ -156,7 +156,7 @@ class TestTokenHelper(TestCase):  # pylint: disable=too-many-public-methods
         jwe = encoder.encrypt_token(VALID_SIGNED_JWT.encode(), self.kid, tag=b'adssadsadsadsadasdasdasads')
 
         with self.assertRaises(InvalidTokenException):
-            decrypt_jwe(jwe.decode(), self.secret_store, KEY_PURPOSE_AUTHENTICATION)
+            decrypt_jwe(jwe.decode(), self.key_store, KEY_PURPOSE_AUTHENTICATION)
 
     def test_cipher_text_corrupted(self):
         encoder = Encoder(*self.encoder_args)
@@ -173,10 +173,10 @@ class TestTokenHelper(TestCase):  # pylint: disable=too-many-public-methods
         reassembled = jwe_protected_header + "." + encrypted_key + "." + encoded_iv + "." + corrupted_cipher + "." + encoded_tag
 
         with self.assertRaises(InvalidTokenException):
-            decrypt_jwe(reassembled, self.secret_store, KEY_PURPOSE_AUTHENTICATION)
+            decrypt_jwe(reassembled, self.key_store, KEY_PURPOSE_AUTHENTICATION)
 
     def test_jwt_io(self):
-        token = decode_jwt(jwtio_signed, self.secret_store, purpose=KEY_PURPOSE_AUTHENTICATION, check_claims=self.CHECK_CLAIMS)
+        token = decode_jwt(jwtio_signed, self.key_store, purpose=KEY_PURPOSE_AUTHENTICATION, check_claims=self.CHECK_CLAIMS)
         self.assertEqual("jimmy", token.get("user"))
 
     def test_does_not_contain_two_instances_of_full_stop(self):
@@ -383,7 +383,7 @@ class TestTokenHelper(TestCase):  # pylint: disable=too-many-public-methods
 
     def assert_in_decode_signed_jwt_exception(self, jwe, error):
         with self.assertRaises(InvalidTokenException) as ite:
-            decode_jwt(jwe, self.secret_store, purpose=KEY_PURPOSE_AUTHENTICATION, check_claims=self.CHECK_CLAIMS)
+            decode_jwt(jwe, self.key_store, purpose=KEY_PURPOSE_AUTHENTICATION, check_claims=self.CHECK_CLAIMS)
 
         if error not in ite.exception.value:
             raise AssertionError(
