@@ -36,7 +36,7 @@ class JWTHelper:
                 JWTMissingClaim,
                 JWTExpired,
                 ValueError) as e:
-            raise InvalidTokenException(repr(e))
+            raise InvalidTokenException from e
 
     @staticmethod
     def encode(claims, kid, key_store, purpose):
