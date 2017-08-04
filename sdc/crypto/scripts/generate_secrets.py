@@ -9,6 +9,7 @@ from cryptography.hazmat.primitives.serialization import load_pem_private_key, E
 import yaml
 from yaml.representer import SafeRepresenter
 
+from sdc.crypto.exceptions import CryptoError
 '''
   This script will generate a secrets.yml file with key information extracted from the provided folder. It assumes
   keys are in the format:
@@ -85,6 +86,9 @@ def _generate_kid_from_key_and_add_to_dict(keys, key_type, platform, service, pu
         hash_object = hashlib.sha1(public_key.encode())
         kid = hash_object.hexdigest()
 
+    if key_type == "private" and not private_key:
+        raise CryptoError("Key type private but no private key provided")
+
     key = {
         "platform": platform,
         "service": service,
@@ -108,7 +112,7 @@ def add_public_key_to_dict(keys, platform, service, purpose, key_use, version, p
     :param key_use what the key is used for
     :param version the version of the key
     :param purpose: The purpose of the public key
-    :param private_key: The name of the public key to add
+    :param public_key: The name of the public key to add
     :param keys_folder: The location on disk where the key exists
     :param kid_override: This allows the caller to override the generated KID value
     :return: None
@@ -149,15 +153,18 @@ def add_private_key_to_dict(keys, platform, service, purpose, key_use, version, 
 def generate_secrets_file(keys, ):
     with open('secrets.yml', 'w') as f:
         yaml.dump({"keys": keys}, f, default_flow_style=False)
+        print("Generated secrets.yml")
 
 
 def generate_keys(keys_folder):
+    print("Generating key information from key files in {}".format(keys_folder))
     key_files = [f for f in os.listdir(keys_folder) if os.path.isfile(os.path.join(keys_folder, f))]
 
     keys = {}
 
     for key_file in key_files:
         try:
+            print("Processing key file {}".format(key_file))
             # remove the .pem extension
             key_file_no_pem = key_file[:key_file.index(".")]
             platform, service, purpose, key_use, key_type, version = key_file_no_pem.split("-")

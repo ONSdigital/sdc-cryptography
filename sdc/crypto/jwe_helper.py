@@ -33,10 +33,10 @@ class JWEHelper:
 
             return jwe_token.payload.decode()
         except (ValueError, InvalidJWEData) as e:
-            raise InvalidTokenException(repr(e))
+            raise InvalidTokenException from e
 
     @staticmethod
-    def encrypt(payload, kid, key_store=None, purpose=None, alg="RSA-OAEP", enc="A256GCM", key=None):
+    def encrypt(payload, kid, key_store=None, purpose=None, key=None):
 
         try:
             if key:
@@ -47,8 +47,8 @@ class JWEHelper:
                 public_jwk = key_store.get_public_key_by_kid(purpose, kid).as_jwk()
 
             protected_header = {
-                "alg": alg,
-                "enc": enc,
+                "alg": "RSA-OAEP",
+                "enc": "A256GCM",
                 "kid": kid,
             }
 
@@ -56,6 +56,6 @@ class JWEHelper:
 
             token.add_recipient(public_jwk)
         except (ValueError, InvalidJWEData) as e:
-            raise InvalidTokenException(repr(e))
+            raise InvalidTokenException from e
 
         return token.serialize(compact=True)
