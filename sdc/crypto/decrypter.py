@@ -1,5 +1,6 @@
-from sdc.crypto.invalid_token_exception import InvalidTokenException
-from sdc.crypto.token_helper import JWTHelper, JWEHelper
+from sdc.crypto.exceptions import InvalidTokenException
+from sdc.crypto.jwe_helper import JWEHelper
+from sdc.crypto.jwt_helper import JWTHelper
 
 
 def decrypt(token, key_store, key_purpose, leeway=120):

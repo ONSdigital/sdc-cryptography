@@ -1,5 +1,5 @@
 from unittest import TestCase
-from sdc.crypto.token_helper import JWEHelper
+from sdc.crypto.jwe_helper import JWEHelper
 
 from jwcrypto import jwk
 

@@ -1,6 +1,6 @@
 import unittest
 
-from sdc.crypto.invalid_token_exception import InvalidTokenException
+from sdc.crypto.exceptions import InvalidTokenException
 
 
 class InvalidTokenExceptionTest(unittest.TestCase):

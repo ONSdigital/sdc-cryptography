@@ -1,7 +1,7 @@
 from jwcrypto import jwk
 from structlog import get_logger
 
-from sdc.crypto.invalid_token_exception import InvalidTokenException
+from sdc.crypto.exceptions import InvalidTokenException, CryptoError
 
 logger = get_logger()
 
@@ -17,16 +17,16 @@ def validate_required_keys(secrets, key_purpose):
     private_keys = [kid for kid in secrets['keys'] if has_purpose_and_type(kid, "private")]
 
     if len(private_keys) > 1:
-        raise Exception("Multiple private keys loaded for the purpose {}".format(key_purpose))
+        raise CryptoError("Multiple private keys loaded for the purpose {}".format(key_purpose))
 
     if len(public_keys) > 1:
-        raise Exception("Multiple public keys loaded for the purpose {}".format(key_purpose))
+        raise CryptoError("Multiple public keys loaded for the purpose {}".format(key_purpose))
 
     if not public_keys:
-        raise Exception("No public key loaded for purpose {}".format(key_purpose))
+        raise CryptoError("No public key loaded for purpose {}".format(key_purpose))
 
     if not private_keys:
-        Exception("No private key loaded for purpose {}".format(key_purpose))
+        CryptoError("No private key loaded for purpose {}".format(key_purpose))
 
 
 class Key:
