@@ -21,38 +21,30 @@ Assuming you are executing from inside an activated virtual environment:
 ## Usage
 
 Need to generate a secrets.yml file first.  Note, this requires a file system
-to store the file.  Then it needs to be loaded, and a secret store generated.
-```python
-from sdc.crypto.utils.generate_secrets import generate_secrets_file
+to store the file.  Then it needs to be loaded, and a key store generated.
+```
 
+python sdc/crypto/scripts/generate_secrets.py <key_folder_location>
 
-# Generate secrets file
-keys = {}
-secrets = {}
-generate_secrets_file(keys, secrets)
-
-# Load generated secret file and create secret store
-import yaml
-EXPECTED_SECRETS = []
-key_purpose = 'key_purpose'
-
-with open('secrets.yml') as file:
-  secrets_from_file = yaml.safe_load(file)
-
-validate_required_secrets(secrets_from_file, EXPECTED_SECRETS, key_purpose)
-secret_store = SecretStore(secrets_from_file)
 ```
 
 After this has been configured, encrypting and decrypting can be done like in the
 example below.
 ```python
+
+secrets_from_file = yaml.safe_load("secrets.yml")
+
+validate_required_secrets(secrets_from_file, EXPECTED_SECRETS, KEY_PURPOSE_SUBMISSION)
+
+key_store= KeyStore(secrets_from_file)
+
 # Encrypt json
 from sdc.crypto.encrypter import encrypt
-encrypted_json = encrypt(json, secret_store, key_purpose)
+encrypted_json = encrypt(json, key_store, key_purpose)
 
 # Decrypt UTF8 jwe token
 from sdc.crypto.decrypter import decrypt
 data_bytes = data.decode('UTF8')
-decrypted_json = decrypt(data_bytes, secret_store, key_purpose)
+decrypted_json = decrypt(data_bytes, key_store, key_purpose)
 
 ```
