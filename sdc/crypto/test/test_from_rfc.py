@@ -1,6 +1,7 @@
 from unittest import TestCase
+from sdc.crypto.token_helper import JWEHelper
 
-from jwcrypto import jwe, jwk
+from jwcrypto import jwk
 
 jwe_key_from_rfc_ = {"kty": "RSA",
                      "n": "oahUIoWw0K0usKNuOR6H4wkf4oBUXHTxRvgb48E-BVvxkeDNjbC4he8rUW"
@@ -70,8 +71,5 @@ class TestFromRFC(TestCase):
         self.assertEqual(jwe_protected_header, tokens[0])
 
         key = jwk.JWK(**jwe_key_from_rfc_)
-        jwe_token = jwe.JWE(algs=['RSA-OAEP', 'A256GCM'])
-        jwe_token.deserialize(encrypted_token)
-        jwe_token.decrypt(key)
 
-        self.assertqual(plaintext, jwe_token.payload.decode())
+        self.assertEqual(plaintext, JWEHelper.decrypt(encrypted_token, key=key))

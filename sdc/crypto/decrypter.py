@@ -17,7 +17,7 @@ def decrypt(token, key_store, key_purpose, leeway=120):
     if len(tokens) != 5:
         raise InvalidTokenException("Incorrect number of tokens")
 
-    decrypted_token = JWEHelper.decrypt(token, key_store, key_purpose)
+    decrypted_token = JWEHelper.decrypt(token, key_store=key_store, key_purpose=key_purpose)
 
     payload = JWTHelper.decode(decrypted_token, key_store, key_purpose, leeway)
 
