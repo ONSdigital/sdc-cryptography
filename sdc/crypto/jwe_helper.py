@@ -33,7 +33,7 @@ class JWEHelper:
 
             return jwe_token.payload.decode()
         except (ValueError, InvalidJWEData) as e:
-            raise InvalidTokenException from e
+            raise InvalidTokenException(str(e)) from e
 
     @staticmethod
     def encrypt(payload, kid, key_store=None, purpose=None, key=None):
@@ -56,6 +56,6 @@ class JWEHelper:
 
             token.add_recipient(public_jwk)
         except (ValueError, InvalidJWEData) as e:
-            raise InvalidTokenException from e
+            raise InvalidTokenException(str(e)) from e
 
         return token.serialize(compact=True)
