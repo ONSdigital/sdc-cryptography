@@ -43,7 +43,7 @@ setup(
     ],
     packages=[
         "sdc.crypto",
-        "sdc.crypto.utils",
+        "sdc.crypto.scripts",
         "sdc.crypto.test",
     ],
     package_data={
