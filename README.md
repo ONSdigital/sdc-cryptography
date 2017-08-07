@@ -48,3 +48,10 @@ data_bytes = data.decode('UTF8')
 decrypted_json = decrypt(data_bytes, key_store, key_purpose)
 
 ```
+
+###### PyPi
+
+This repo is available in PyPi at [sdc-cryptography]https://pypi.python.org/pypi/sdc-cryptography)
+
+The package is published automatically to PyPi when a tag is created in Github. The configuration for this is in the
+.travis.yml file.
