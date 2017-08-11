@@ -8,9 +8,9 @@ def decrypt(token, key_store, key_purpose, leeway=120):
     the payload.
 
     :param str token: The jwe token.
-    :param key_store: The secret store.
+    :param key_store: The key store.
     :param str key_purpose: Context for the key.
-    :param int leeway: Extra allowed time after expiration to account for clock skew.
+    :param int leeway: Extra allowed time in seconds after expiration to account for clock skew.
     :return: The decrypted payload.
 
     """

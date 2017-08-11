@@ -6,7 +6,7 @@ def encrypt(json, key_store, key_purpose):
     """This encrypts the supplied json and returns a jwe token.
 
     :param str json: The json to be encrypted.
-    :param key_store: The secret store.
+    :param key_store: The key store.
     :param str key_purpose: Context for the key.
     :return: A jwe token.
 

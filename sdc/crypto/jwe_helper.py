@@ -1,11 +1,12 @@
+import logging
 from jwcrypto import jwe
 from jwcrypto.jwe import InvalidJWEData
-from structlog import get_logger
+
 
 from sdc.crypto.exceptions import InvalidTokenException
 from sdc.crypto.helper import extract_kid_from_header
 
-logger = get_logger()
+logger = logging.getLogger(__name__)
 
 
 class JWEHelper:
