@@ -25,7 +25,7 @@ class JWEHelper:
             else:
                 jwe_kid = extract_kid_from_header(encrypted_token)
 
-                logger.info("Decrypting JWE", kid=jwe_kid)
+                logger.info("Decrypting JWE kid is {}".format(jwe_kid))
 
                 private_jwk = key_store.get_private_key_by_kid(purpose, jwe_kid).as_jwk()
 
@@ -42,7 +42,7 @@ class JWEHelper:
             if key:
                 public_jwk = key
             else:
-                logger.info("Encrypting JWE", kid=kid)
+                logger.info("Encrypting JWE kid is {}".format(kid))
 
                 public_jwk = key_store.get_public_key_by_kid(purpose, kid).as_jwk()
 

@@ -1,9 +1,10 @@
+import logging
+
 from jwcrypto import jwk
-from structlog import get_logger
 
 from sdc.crypto.exceptions import InvalidTokenException, CryptoError
 
-logger = get_logger()
+logger = logging.getLogger(__name__)
 
 
 def validate_required_keys(secrets, key_purpose):
@@ -45,8 +46,8 @@ class KeyStore:
         try:
             self.keys = {kid: Key(kid, key['purpose'], key['type'], key['value']) for kid, key in secrets['keys'].items()}
         except KeyError as e:
-            logger.warning("Missing mandatory key values", error=str(e))
-            raise Exception(e)
+            logger.warning("Missing mandatory key values")
+            raise CryptoError from e
 
     def get_private_key_by_kid(self, purpose, kid):
         return self.get_key_by_kid(purpose, kid, "private")
