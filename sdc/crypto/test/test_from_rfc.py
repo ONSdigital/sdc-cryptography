@@ -72,4 +72,4 @@ class TestFromRFC(TestCase):
 
         key = jwk.JWK(**jwe_key_from_rfc_)
 
-        self.assertEqual(plaintext, JWEHelper.decrypt(encrypted_token, key=key))
+        self.assertEqual(plaintext, JWEHelper.decrypt_with_key(encrypted_token, key=key))

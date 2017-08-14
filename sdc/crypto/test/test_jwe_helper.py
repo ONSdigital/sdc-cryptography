@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from sdc.crypto.exceptions import InvalidTokenException
 from sdc.crypto.jwe_helper import JWEHelper
-from sdc.crypto.keys import KeyStore
+from sdc.crypto.key_store import KeyStore
 from sdc.crypto.test import VALID_JWE, TEST_DO_NOT_USE_UPSTREAM_PUBLIC_PEM, TEST_DO_NOT_USE_SR_PRIVATE_PEM, \
     VALID_SIGNED_JWT, TEST_DO_NOT_USE_UPSTREAM_PRIVATE_KEY, TEST_DO_NOT_USE_SR_PUBLIC_KEY
 from sdc.crypto.test.jwe_encrypter import Encoder

@@ -42,9 +42,9 @@ class Key:
 
 
 class KeyStore:
-    def __init__(self, secrets):
+    def __init__(self, keys):
         try:
-            self.keys = {kid: Key(kid, key['purpose'], key['type'], key['value']) for kid, key in secrets['keys'].items()}
+            self.keys = {kid: Key(kid, key['purpose'], key['type'], key['value']) for kid, key in keys['keys'].items()}
         except KeyError as e:
             logger.warning("Missing mandatory key values")
             raise CryptoError from e

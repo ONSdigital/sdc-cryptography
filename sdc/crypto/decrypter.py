@@ -4,7 +4,7 @@ from sdc.crypto.jwt_helper import JWTHelper
 
 
 def decrypt(token, key_store, key_purpose, leeway=120):
-    """This decrypts the provided jwe token and the resulting jwt token and returns
+    """This decrypts the provided jwe token, then decodes resulting jwt token and returns
     the payload.
 
     :param str token: The jwe token.

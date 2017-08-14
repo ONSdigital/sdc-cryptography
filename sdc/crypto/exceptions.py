@@ -1,6 +1,16 @@
 
 class CryptoError(Exception):
-    ''' General Exception raise by this libraray if an error occurs not covered below '''
+    ''' General Exception raise by this library if an error occurs not covered below '''
+    pass
+
+
+class MissingKidException(Exception):
+    ''' Raised if a Kid cannot be found in the keystore '''
+    pass
+
+
+class MissingKeyException(Exception):
+    ''' Raised if a key cannot be found in the keystore '''
     pass
 
 

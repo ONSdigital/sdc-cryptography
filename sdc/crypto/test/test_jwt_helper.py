@@ -4,7 +4,7 @@ from unittest import TestCase
 
 from sdc.crypto.exceptions import InvalidTokenException
 from sdc.crypto.jwt_helper import JWTHelper
-from sdc.crypto.keys import KeyStore
+from sdc.crypto.key_store import KeyStore
 from sdc.crypto.test import TEST_DO_NOT_USE_UPSTREAM_PUBLIC_PEM, TEST_DO_NOT_USE_SR_PRIVATE_PEM, \
     TEST_DO_NOT_USE_UPSTREAM_PRIVATE_KEY, TEST_DO_NOT_USE_SR_PUBLIC_KEY
 
