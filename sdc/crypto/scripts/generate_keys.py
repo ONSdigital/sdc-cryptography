@@ -11,7 +11,7 @@ from yaml.representer import SafeRepresenter
 
 from sdc.crypto.exceptions import CryptoError
 '''
-  This script will generate a secrets.yml file with key information extracted from the provided folder. It assumes
+  This script will generate a keys.yml file with key information extracted from the provided folder. It assumes
   keys are in the format:
 
   <platform>-<service>-<purpose>-<key_use>-<key_type>-<version>.pem
@@ -179,9 +179,9 @@ def generate_keys(keys_folder):
 
 
 def generate_key_store(keys, ):
-    with open('secrets.yml', 'w') as f:
+    with open('keys.yml', 'w') as f:
         yaml.dump({"keys": keys}, f, default_flow_style=False)
-        print("Generated secrets.yml")
+        print("Generated keys.yml")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate secrets key file.')

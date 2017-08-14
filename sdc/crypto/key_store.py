@@ -7,15 +7,15 @@ from sdc.crypto.exceptions import InvalidTokenException, CryptoError
 logger = logging.getLogger(__name__)
 
 
-def validate_required_keys(secrets, key_purpose):
+def validate_required_keys(keys, key_purpose):
 
     def has_purpose_and_type(kid, key_type):
-        key = secrets['keys'][kid]
+        key = keys['keys'][kid]
         return key['purpose'] == key_purpose and key['type'] == key_type
 
-    public_keys = [kid for kid in secrets['keys'] if has_purpose_and_type(kid, "public")]
+    public_keys = [kid for kid in keys['keys'] if has_purpose_and_type(kid, "public")]
 
-    private_keys = [kid for kid in secrets['keys'] if has_purpose_and_type(kid, "private")]
+    private_keys = [kid for kid in keys['keys'] if has_purpose_and_type(kid, "private")]
 
     if len(private_keys) > 1:
         raise CryptoError("Multiple private keys loaded for the purpose {}".format(key_purpose))

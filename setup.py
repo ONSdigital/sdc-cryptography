@@ -51,7 +51,7 @@ setup(
             "requirements.txt",
         ],
     },
-    scripts=['sdc/crypto/scripts/generate_secrets.py'],
+    scripts=['sdc/crypto/scripts/generate_keys.py'],
     install_requires=installRequirements,
     entry_points={
         "console_scripts": [

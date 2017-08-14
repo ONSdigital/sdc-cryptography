@@ -20,11 +20,11 @@ Assuming you are executing from inside an activated virtual environment:
 
 ## Usage
 
-Need to generate a secrets.yml file first.  Note, this requires a file system
+Need to generate a keys.yml file first.  Note, this requires a file system
 to store the file.  Then it needs to be loaded, and a key store generated.
 ```
 
-python sdc/crypto/scripts/generate_secrets.py <key_folder_location>
+generate_keys.py <key_folder_location>
 
 ```
 
