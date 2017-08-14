@@ -80,15 +80,16 @@ def get_file_contents(folder, filename, trim=False):
     return data
 
 
-def _generate_kid_from_key_and_add_to_dict(keys, key_type, platform, service, purpose, key_use, version, public_key,
-                                           private_key=None, kid_override=None):
-    if not kid_override:
-        hash_object = hashlib.sha1(public_key.encode())
-        kid = hash_object.hexdigest()
+def _generate_kid_from_key(public_key):
+    hash_object = hashlib.sha1(public_key.encode())
+    kid = hash_object.hexdigest()
+    return kid
+
+
+def _create_key(platform, service, key_use, key_type, purpose, version, public_key, private_key=None):
 
     if key_type == "private" and not private_key:
         raise CryptoError("Key type private but no private key provided")
-
     key = {
         "platform": platform,
         "service": service,
@@ -98,12 +99,10 @@ def _generate_kid_from_key_and_add_to_dict(keys, key_type, platform, service, pu
         "version": version,
         "value": LiteralUnicode(private_key if private_key else public_key),
     }
+    return key
 
-    keys[kid_override if kid_override else kid] = key
 
-
-def add_public_key_to_dict(keys, platform, service, purpose, key_use, version, public_key, keys_folder,
-                           kid_override=None):
+def get_public_key(platform, service, purpose, key_use, version, public_key, keys_folder):
     '''
     Loads a public key from the file system and adds it to a dict of keys
     :param keys: A dict of keys
@@ -119,12 +118,13 @@ def add_public_key_to_dict(keys, platform, service, purpose, key_use, version, p
     '''
     public_key_data = get_file_contents(keys_folder, public_key)
 
-    _generate_kid_from_key_and_add_to_dict(keys, "public", platform, service, purpose, key_use, version,
-                                           public_key_data, kid_override=kid_override)
+    kid = _generate_kid_from_key(public_key_data)
+
+    key = _create_key("public", platform, service, purpose, key_use, version, public_key_data)
+    return kid, key
 
 
-def add_private_key_to_dict(keys, platform, service, purpose, key_use, version, private_key, keys_folder,
-                            kid_override=None):
+def get_private_key(platform, service, purpose, key_use, version, private_key, keys_folder):
     '''
     Loads a private key from the file system and adds it to a dict of keys
     :param keys: A dict of keys
@@ -146,14 +146,10 @@ def add_private_key_to_dict(keys, platform, service, purpose, key_use, version, 
 
     pub_bytes = pub_key.public_bytes(Encoding.PEM, PublicFormat.SubjectPublicKeyInfo)
 
-    _generate_kid_from_key_and_add_to_dict(keys, "private", platform, service, purpose, key_use, version,
-                                           pub_bytes.decode(), private_key_data, kid_override=kid_override)
+    kid = _generate_kid_from_key(pub_bytes.decode())
 
-
-def generate_secrets_file(keys, ):
-    with open('secrets.yml', 'w') as f:
-        yaml.dump({"keys": keys}, f, default_flow_style=False)
-        print("Generated secrets.yml")
+    key = _create_key("public", platform, service, purpose, key_use, version, pub_bytes.decode(), private_key_data)
+    return kid, key
 
 
 def generate_keys(keys_folder):
@@ -169,17 +165,23 @@ def generate_keys(keys_folder):
             key_file_no_pem = key_file[:key_file.index(".")]
             platform, service, purpose, key_use, key_type, version = key_file_no_pem.split("-")
             if key_type == "public":
-                add_public_key_to_dict(keys, platform, service, purpose, key_use, version, key_file, keys_folder)
+                kid, key = get_public_key(platform, service, purpose, key_use, version, key_file, keys_folder)
             elif key_type == "private":
-                add_private_key_to_dict(keys, platform, service, purpose, key_use, version, key_file, keys_folder)
+                kid, key = get_private_key(platform, service, purpose, key_use, version, key_file, keys_folder)
             else:
                 print("Unknown key type {} in {}".format(key_type, key_file))
+            keys[kid] = key
 
         except ValueError:
             print("File {} is not in correct format".format(key_file))
 
-    generate_secrets_file(keys)
+    generate_key_store(keys)
 
+
+def generate_key_store(keys, ):
+    with open('secrets.yml', 'w') as f:
+        yaml.dump({"keys": keys}, f, default_flow_style=False)
+        print("Generated secrets.yml")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate secrets key file.')
