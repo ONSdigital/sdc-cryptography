@@ -5,7 +5,7 @@ class CryptoError(Exception):
 
 
 class MissingKidException(Exception):
-    ''' Raised if a Kid cannot be found in the keystore '''
+    ''' Raised if a Kid cannot be found in the token header '''
     pass
 
 
