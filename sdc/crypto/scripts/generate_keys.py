@@ -10,6 +10,7 @@ import yaml
 from yaml.representer import SafeRepresenter
 
 from sdc.crypto.exceptions import CryptoError
+
 '''
   This script will generate a keys.yml file with key information extracted from the provided folder. It assumes
   keys are in the format:
@@ -87,7 +88,6 @@ def _generate_kid_from_key(public_key):
 
 
 def _create_key(platform, service, key_use, key_type, purpose, version, public_key, private_key=None):
-
     if key_type == "private" and not private_key:
         raise CryptoError("Key type private but no private key provided")
     key = {
@@ -120,7 +120,8 @@ def get_public_key(platform, service, purpose, key_use, version, public_key, key
 
     kid = _generate_kid_from_key(public_key_data)
 
-    key = _create_key("public", platform, service, purpose, key_use, version, public_key_data)
+    key = _create_key(platform=platform, service=service, key_use=key_use, key_type="public", purpose=purpose,
+                      version=version, public_key=public_key_data)
     return kid, key
 
 
@@ -148,7 +149,8 @@ def get_private_key(platform, service, purpose, key_use, version, private_key, k
 
     kid = _generate_kid_from_key(pub_bytes.decode())
 
-    key = _create_key("public", platform, service, purpose, key_use, version, pub_bytes.decode(), private_key_data)
+    key = _create_key(platform=platform, service=service, key_use=key_use, key_type="private", purpose=purpose,
+                      version=version, public_key=pub_bytes.decode(), private_key=private_key_data)
     return kid, key
 
 
@@ -182,6 +184,7 @@ def generate_key_store(keys, ):
     with open('keys.yml', 'w') as f:
         yaml.dump({"keys": keys}, f, default_flow_style=False)
         print("Generated keys.yml")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate secrets key file.')
