@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 class JWEHelper:
     '''
-    Helper methods for encrypting a JWS/JWT. This class assumes you have used the RSA-OAP-A256GCM algoritm
+    Helper methods for encrypting a JWS/JWT. This class assumes you have used the RSA-OAP-A256GCM alogrithm
     and the required private key is available in the keystore.
     '''
     @staticmethod

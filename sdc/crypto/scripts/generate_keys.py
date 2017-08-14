@@ -120,8 +120,9 @@ def get_public_key(platform, service, purpose, key_use, version, public_key, key
 
     kid = _generate_kid_from_key(public_key_data)
 
-    key = _create_key(platform=platform, service=service, key_use=key_use, key_type="public", purpose=purpose,
-                      version=version, public_key=public_key_data)
+    key = _create_key(platform=platform, service=service, key_use=key_use,
+                      key_type="public", purpose=purpose, version=version,
+                      public_key=public_key_data)
     return kid, key
 
 
@@ -149,8 +150,9 @@ def get_private_key(platform, service, purpose, key_use, version, private_key, k
 
     kid = _generate_kid_from_key(pub_bytes.decode())
 
-    key = _create_key(platform=platform, service=service, key_use=key_use, key_type="private", purpose=purpose,
-                      version=version, public_key=pub_bytes.decode(), private_key=private_key_data)
+    key = _create_key(platform=platform, service=service, key_use=key_use,
+                      key_type="private", purpose=purpose, version=version,
+                      public_key=pub_bytes.decode(), private_key=private_key_data)
     return kid, key
 
 
