@@ -1,4 +1,8 @@
 # sdc-cryptography
+
+[![Build Status](https://travis-ci.org/ONSdigital/sdc-cryptography.svg?branch=master)](https://travis-ci.org/ONSdigital/sdc-cryptography)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b7b2eb54a248411086ddffb66097e578)](https://www.codacy.com/app/ONS/sdc-cryptography?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ONSdigital/sdc-cryptography&amp;utm_campaign=Badge_Grade)
+[![codecov](https://codecov.io/gh/ONSdigital/sdc-cryptography/branch/master/graph/badge.svg)](https://codecov.io/gh/ONSdigital/sdc-cryptography)
 A common source code library for SDC services that use JWE. Apps wishing to use this should add the sdc_cryptography
 dependency to their requirements.txt and install with pip.
 
