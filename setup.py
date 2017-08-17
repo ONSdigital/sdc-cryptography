@@ -43,7 +43,7 @@ setup(
     ],
     packages=[
         "sdc.crypto",
-        "sdc.crypto.utils",
+        "sdc.crypto.scripts",
         "sdc.crypto.test",
     ],
     package_data={
@@ -51,6 +51,7 @@ setup(
             "requirements.txt",
         ],
     },
+    scripts=['sdc/crypto/scripts/generate_keys.py'],
     install_requires=installRequirements,
     entry_points={
         "console_scripts": [
