@@ -5,7 +5,6 @@ from jwcrypto import jwt
 from jwcrypto.jws import InvalidJWSSignature, InvalidJWSObject
 from jwcrypto.jwt import JWTInvalidClaimFormat, JWTMissingClaim, JWTExpired
 
-
 from sdc.crypto.exceptions import InvalidTokenException
 from sdc.crypto.helper import extract_kid_from_header
 

@@ -1,9 +1,9 @@
 import logging
+
 from jwcrypto import jwe
 from jwcrypto.jwe import InvalidJWEData
 
-
-from sdc.crypto.exceptions import InvalidTokenException, MissingKidException, MissingKeyException
+from sdc.crypto.exceptions import InvalidTokenException, MissingKeyException
 from sdc.crypto.helper import extract_kid_from_header
 
 logger = logging.getLogger(__name__)
@@ -21,8 +21,6 @@ class JWEHelper:
             jwe_token.deserialize(encrypted_token)
 
             jwe_kid = extract_kid_from_header(encrypted_token)
-            if not jwe_kid:
-                raise MissingKidException
 
             logger.info("Decrypting JWE kid is {}".format(jwe_kid))
 

@@ -1,11 +1,6 @@
 
 class CryptoError(Exception):
-    ''' General Exception raise by this library if an error occurs not covered below '''
-    pass
-
-
-class MissingKidException(Exception):
-    ''' Raised if a Kid cannot be found in the token header '''
+    ''' General Exception raised by this library if an error occurs not covered below '''
     pass
 
 

@@ -32,15 +32,15 @@ generate_keys.py <key_folder_location>
 
 ```
 
-After this has been configured, encrypting and decrypting can be done like in the
+After this has been configured, encrypting and decrypting can be done as in the
 example below.
 ```python
 
-secrets_from_file = yaml.safe_load("secrets.yml")
+secrets_from_file = yaml.safe_load("keys.yml")
 
 validate_required_secrets(secrets_from_file, EXPECTED_SECRETS, KEY_PURPOSE_SUBMISSION)
 
-key_store= KeyStore(secrets_from_file)
+key_store = KeyStore(secrets_from_file)
 
 # Encrypt json
 from sdc.crypto.encrypter import encrypt
@@ -55,7 +55,7 @@ decrypted_json = decrypt(data_bytes, key_store, key_purpose)
 
 ###### PyPi
 
-This repo is available in PyPi at [sdc-cryptography]https://pypi.python.org/pypi/sdc-cryptography)
+This repo is available from PyPi at [sdc-cryptography]https://pypi.python.org/pypi/sdc-cryptography)
 
 The package is published automatically to PyPi when a tag is created in Github. The configuration for this is in the
 .travis.yml file.
