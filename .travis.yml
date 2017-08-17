@@ -1,11 +1,15 @@
 language: python
 python:
-- '3.6'
-- '3.5'
-- '3.4'
+  - '3.6'
+  - '3.5'
+  - '3.4'
 sudo: required
-install: make build
-script: make test
+install:
+  - make build
+  - pip install codecov
+script:
+  - make test
+  - coverage run -m unittest sdc/crypto/test/test*.py
 deploy:
   - provider: pypi
     distributions: sdist bdist_wheel
@@ -15,3 +19,5 @@ deploy:
     on:
       tags: true
       python: 3.6
+after_success:
+  - codecov
