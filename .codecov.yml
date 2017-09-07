@@ -1,9 +1,0 @@
-coverage:
-  status:
-    project:
-      default:
-        branches:
-        threshold: 1%
-    patch:
-      default:
-        threshold: 1% 
