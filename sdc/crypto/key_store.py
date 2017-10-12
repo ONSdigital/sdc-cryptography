@@ -17,17 +17,11 @@ def validate_required_keys(keys, key_purpose):
 
     private_keys = [kid for kid in keys['keys'] if has_purpose_and_type(kid, "private")]
 
-    if len(private_keys) > 1:
-        raise CryptoError("Multiple private keys loaded for the purpose {}".format(key_purpose))
-
-    if len(public_keys) > 1:
-        raise CryptoError("Multiple public keys loaded for the purpose {}".format(key_purpose))
-
     if not public_keys:
         raise CryptoError("No public key loaded for purpose {}".format(key_purpose))
 
     if not private_keys:
-        CryptoError("No private key loaded for purpose {}".format(key_purpose))
+        raise CryptoError("No private key loaded for purpose {}".format(key_purpose))
 
 
 class Key:
