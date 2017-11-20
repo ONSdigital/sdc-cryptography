@@ -1,12 +1,14 @@
 import base64
 import os
 from unittest import TestCase
+import json
 
 from sdc.crypto.exceptions import InvalidTokenException
 from sdc.crypto.jwt_helper import JWTHelper
 from sdc.crypto.key_store import KeyStore
 from sdc.crypto.test import TEST_DO_NOT_USE_UPSTREAM_PUBLIC_PEM, TEST_DO_NOT_USE_SR_PRIVATE_PEM, \
-    TEST_DO_NOT_USE_UPSTREAM_PRIVATE_KEY, TEST_DO_NOT_USE_SR_PUBLIC_KEY
+    TEST_DO_NOT_USE_UPSTREAM_PRIVATE_KEY, TEST_DO_NOT_USE_SR_PUBLIC_KEY, TEST_DO_NOT_USE_EQ_PRIVATE_KEY, \
+    TEST_DO_NOT_USE_EQ_PUBLIC_KEY
 
 KEY_PURPOSE_AUTHENTICATION = "authentication"
 
@@ -22,10 +24,10 @@ jwtio_header = "eyJraWQiOiI3MDllYjQyY2ZlZTU1NzAwNThjZTA3MTFmNzMwYmZiYjdkNGM4YWRl
                "QifQ"
 jwtio_payload = "eyJ1c2VyIjoiamltbXkiLCJpYXQiOjE0OTgxMzc1MTkuMTM1NDc5LCJleHAiOjEuMDAwMDAwMDAwMDAxNDk4MmUrMjF9"
 jwtio_signature = "tXGcIZf" \
-                  "bTIgxrd7ILj_XqcoiRLtmgjnJ0WORPBJ4M9Kd3zKTBkoIM6pN5XWdqsfvdby53mxQzi3_DZS4Ab4XvF29Wce49GVv7k69ZZJ-5g2NX9iJ" \
-                  "y4_Be8uTZNKSwMpfrnkRrsbaWAGrXe9NKC3WC_Iq4UuE3KM7ltvOae4be-2863DP7_QEUtaAtXSwUkjPcgkvMPns-SurtFNXgFFVToNnw" \
-                  "IuJ9UWsY8JlX1UB56wfqu68hbl88lenIf9Ym0r5hq0DlOZYNtjVizVDFciRx_52d4oeKMSzwJ1jB5aZ7YKRNHTo38Kltb5FkHRcIkV1Ae" \
-                  "68-5dZeE9Yu_JHPMi_hw"
+                  "bTIgxrd7ILj_XqcoiRLtmgjnJ0WORPBJ4M9Kd3zKTBkoIM6pN5XWdqsfvdby53mxQzi3_" \
+                  "DZS4Ab4XvF29Wce49GVv7k69ZZJ-5g2NX9iJy4_Be8uTZNKSwMpfrnkRrsbaWAGrXe9NKC3WC_Iq4UuE3KM7ltvOae4be-2" \
+                  "863DP7_QEUtaAtXSwUkjPcgkvMPns-SurtFNXgFFVToNnwIuJ9UWsY8JlX1UB56wfqu68hbl88" \
+                  "lenIf9Ym0r5hq0DlOZYNtjVizVDFciRx_52d4oeKMSzwJ1jB5aZ7YKRNHTo38Kltb5FkHRcIkV1Ae68-5dZeE9Yu_JHPMi_hw"
 
 jwtio_signed = jwtio_header + "." + jwtio_payload + "." + jwtio_signature
 
@@ -52,6 +54,17 @@ class TestTokenHelper(TestCase):  # pylint: disable=too-many-public-methods
                 "709eb42cfee5570058ce0711f730bfbb7d4c8ade": {'purpose': KEY_PURPOSE_AUTHENTICATION,
                                                              'type': 'public',
                                                              'value': TEST_DO_NOT_USE_UPSTREAM_PUBLIC_PEM},
+                "EQ_USER_AUTHENTICATION_EQ_KEY": {'purpose': KEY_PURPOSE_AUTHENTICATION,
+                                                  'type': 'private',
+                                                  'value': TEST_DO_NOT_USE_EQ_PRIVATE_KEY},
+
+            }
+        })
+        self.key_store_secondary = KeyStore({
+            "keys": {
+                "EQ_USER_AUTHENTICATION_EQ_KEY": {'purpose': KEY_PURPOSE_AUTHENTICATION,
+                                                  'type': 'public',
+                                                  'value': TEST_DO_NOT_USE_EQ_PUBLIC_KEY},
             }
         })
 
@@ -276,3 +289,29 @@ class TestTokenHelper(TestCase):  # pylint: disable=too-many-public-methods
         if error not in ite.exception.value:
             raise AssertionError(
                 '"{}" not found in decode exception. Actual exception message [{}]'.format(error, ite.exception.value))
+
+    def test_encode_with_dict_and_string(self):
+        claims_as_dict = {
+            'data': [
+                {
+                    'string': 'something',
+                    'boolean': True,
+                    'number': 10,
+                    'decimal': 10.1,
+                    'null': None
+                }
+            ]
+        }
+        claims_as_string = json.dumps(claims_as_dict)
+
+        string_token = JWTHelper.encode(claims=claims_as_string, kid='EQ_USER_AUTHENTICATION_EQ_KEY',
+                                        key_store=self.key_store, purpose=KEY_PURPOSE_AUTHENTICATION)
+        dict_token = JWTHelper.encode(claims=claims_as_dict, kid='EQ_USER_AUTHENTICATION_EQ_KEY',
+                                      key_store=self.key_store, purpose=KEY_PURPOSE_AUTHENTICATION)
+
+        string_token_decode = JWTHelper.decode(jwt_token=string_token, key_store=self.key_store_secondary,
+                                               purpose=KEY_PURPOSE_AUTHENTICATION)
+        dict_token_decode = JWTHelper.decode(jwt_token=dict_token, key_store=self.key_store_secondary,
+                                             purpose=KEY_PURPOSE_AUTHENTICATION)
+
+        self.assertEqual(string_token_decode, dict_token_decode)
