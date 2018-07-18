@@ -1,4 +1,7 @@
 ### Unreleased
+
+
+### 0.2.2 2018-07-18
  - Update pyyaml to 3.13 because of CVE-2017-18342
 
 ### 0.2.1 2017-10-12
