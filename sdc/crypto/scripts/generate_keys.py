@@ -5,7 +5,12 @@ import os
 import argparse
 
 from cryptography.hazmat.backends.openssl.backend import backend
-from cryptography.hazmat.primitives.serialization import load_pem_private_key, Encoding, PublicFormat
+from cryptography.hazmat.primitives.serialization import (
+    load_pem_private_key,
+    load_pem_public_key,
+    Encoding,
+    PublicFormat,
+)
 import yaml
 from yaml.representer import SafeRepresenter
 
@@ -118,7 +123,10 @@ def get_public_key(platform, service, purpose, key_use, version, public_key, key
     '''
     public_key_data = get_file_contents(keys_folder, public_key)
 
-    kid = _generate_kid_from_key(public_key_data)
+    pub_key = load_pem_public_key(public_key_data.encode(), backend=backend)
+    pub_bytes = pub_key.public_bytes(Encoding.PEM, PublicFormat.SubjectPublicKeyInfo)
+
+    kid = _generate_kid_from_key(pub_bytes.decode())
 
     key = _create_key(platform=platform, service=service, key_use=key_use,
                       key_type="public", purpose=purpose, version=version,
