@@ -1,4 +1,5 @@
 ### Unreleased
+- Create public key IDs more consistently
 
 ### 0.2.3 2018-07-31
 - Update cryptography and jwcrypto due to CVE-2018-10903
