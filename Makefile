@@ -2,7 +2,7 @@
 .PHONY: build clean sdist test
 
 build:
-	pip3 install -r requirements.txt
+	pipenv install --dev
 
 clean:
 	rm -rf sdc/crypto/doc/html
@@ -11,7 +11,6 @@ clean:
 sdist:
 	python setup.py sdist
 
-test: build
-	pip3 install -r test_requirements.txt
+test:
 	flake8 .
-	python -m unittest discover sdc
+	pytest -v --cov-report term-missing --cov sdc.crypto

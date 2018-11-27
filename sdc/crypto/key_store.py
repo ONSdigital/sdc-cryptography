@@ -60,6 +60,11 @@ class KeyStore:
             return key
 
     def get_key_for_purpose_and_type(self, purpose, key_type):
+        """
+        Gets a list of keys that match the purpose and key_type, and returns the first key in that list
+        Note, if there are many keys that match the criteria, the one you get back will be random from that list
+        :returns: A key object that matches the criteria
+        """
         key = [key for key in self.keys.values() if key.purpose == purpose and key.key_type == key_type]
         try:
             return key[0]

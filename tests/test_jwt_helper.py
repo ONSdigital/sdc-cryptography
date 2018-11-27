@@ -1,12 +1,13 @@
 import base64
 import os
-from unittest import TestCase
 import json
+
+import pytest
 
 from sdc.crypto.exceptions import InvalidTokenException
 from sdc.crypto.jwt_helper import JWTHelper
 from sdc.crypto.key_store import KeyStore
-from sdc.crypto.test import TEST_DO_NOT_USE_UPSTREAM_PUBLIC_PEM, TEST_DO_NOT_USE_SR_PRIVATE_PEM, \
+from tests import TEST_DO_NOT_USE_UPSTREAM_PUBLIC_PEM, TEST_DO_NOT_USE_SR_PRIVATE_PEM, \
     TEST_DO_NOT_USE_UPSTREAM_PRIVATE_KEY, TEST_DO_NOT_USE_SR_PUBLIC_KEY, TEST_DO_NOT_USE_EQ_PRIVATE_KEY, \
     TEST_DO_NOT_USE_EQ_PUBLIC_KEY
 
@@ -32,53 +33,52 @@ jwtio_signature = "tXGcIZf" \
 jwtio_signed = jwtio_header + "." + jwtio_payload + "." + jwtio_signature
 
 
-class TestTokenHelper(TestCase):  # pylint: disable=too-many-public-methods
+class TestTokenHelper:
 
     CHECK_CLAIMS = {
         "exp": None,
         "iat": None,
     }
 
-    def setUp(self):
-        self.key_store = KeyStore({
-            "keys": {
-                "e19091072f920cbf3ca9f436ceba309e7d814a62": {'purpose': KEY_PURPOSE_AUTHENTICATION,
-                                                             'type': 'private',
-                                                             'value': TEST_DO_NOT_USE_SR_PRIVATE_PEM},
-                "EQ_USER_AUTHENTICATION_SR_PRIVATE_KEY": {'purpose': KEY_PURPOSE_AUTHENTICATION,
-                                                          'type': 'private',
-                                                          'value': TEST_DO_NOT_USE_SR_PRIVATE_PEM},
-                "EDCRRM": {'purpose': KEY_PURPOSE_AUTHENTICATION,
-                           'type': 'public',
-                           'value': TEST_DO_NOT_USE_PUBLIC_KEY},
-                "709eb42cfee5570058ce0711f730bfbb7d4c8ade": {'purpose': KEY_PURPOSE_AUTHENTICATION,
-                                                             'type': 'public',
-                                                             'value': TEST_DO_NOT_USE_UPSTREAM_PUBLIC_PEM},
-                "EQ_USER_AUTHENTICATION_EQ_KEY": {'purpose': KEY_PURPOSE_AUTHENTICATION,
-                                                  'type': 'private',
-                                                  'value': TEST_DO_NOT_USE_EQ_PRIVATE_KEY},
+    key_store = KeyStore({
+        "keys": {
+            "e19091072f920cbf3ca9f436ceba309e7d814a62": {'purpose': KEY_PURPOSE_AUTHENTICATION,
+                                                         'type': 'private',
+                                                         'value': TEST_DO_NOT_USE_SR_PRIVATE_PEM},
+            "EQ_USER_AUTHENTICATION_SR_PRIVATE_KEY": {'purpose': KEY_PURPOSE_AUTHENTICATION,
+                                                      'type': 'private',
+                                                      'value': TEST_DO_NOT_USE_SR_PRIVATE_PEM},
+            "EDCRRM": {'purpose': KEY_PURPOSE_AUTHENTICATION,
+                       'type': 'public',
+                       'value': TEST_DO_NOT_USE_PUBLIC_KEY},
+            "709eb42cfee5570058ce0711f730bfbb7d4c8ade": {'purpose': KEY_PURPOSE_AUTHENTICATION,
+                                                         'type': 'public',
+                                                         'value': TEST_DO_NOT_USE_UPSTREAM_PUBLIC_PEM},
+            "EQ_USER_AUTHENTICATION_EQ_KEY": {'purpose': KEY_PURPOSE_AUTHENTICATION,
+                                              'type': 'private',
+                                              'value': TEST_DO_NOT_USE_EQ_PRIVATE_KEY},
 
-            }
-        })
-        self.key_store_secondary = KeyStore({
-            "keys": {
-                "EQ_USER_AUTHENTICATION_EQ_KEY": {'purpose': KEY_PURPOSE_AUTHENTICATION,
-                                                  'type': 'public',
-                                                  'value': TEST_DO_NOT_USE_EQ_PUBLIC_KEY},
-            }
-        })
+        }
+    })
+    key_store_secondary = KeyStore({
+        "keys": {
+            "EQ_USER_AUTHENTICATION_EQ_KEY": {'purpose': KEY_PURPOSE_AUTHENTICATION,
+                                              'type': 'public',
+                                              'value': TEST_DO_NOT_USE_EQ_PUBLIC_KEY},
+        }
+    })
 
-        self.kid = "e19091072f920cbf3ca9f436ceba309e7d814a62"
+    kid = "e19091072f920cbf3ca9f436ceba309e7d814a62"
 
-        self.encoder_args = (
-            TEST_DO_NOT_USE_UPSTREAM_PRIVATE_KEY,
-            TEST_DO_NOT_USE_SR_PUBLIC_KEY
-        )
+    encoder_args = (
+        TEST_DO_NOT_USE_UPSTREAM_PRIVATE_KEY,
+        TEST_DO_NOT_USE_SR_PUBLIC_KEY
+    )
 
     def test_jwt_io(self):
         token = JWTHelper.decode(jwtio_signed, self.key_store, purpose=KEY_PURPOSE_AUTHENTICATION,
-                                 check_claims=self.CHECK_CLAIMS)
-        self.assertEqual("jimmy", token.get("user"))
+                                 leeway=100, check_claims=self.CHECK_CLAIMS)
+        assert token.get("user") == "jimmy"
 
     def test_does_not_contain_two_instances_of_full_stop(self):
         jwe = jwtio_signed.replace('.', '', 1)
@@ -283,12 +283,14 @@ class TestTokenHelper(TestCase):  # pylint: disable=too-many-public-methods
         self.assert_in_decode_signed_jwt_exception(jwt, "InvalidSignature")
 
     def assert_in_decode_signed_jwt_exception(self, jwe, error):
-        with self.assertRaises(InvalidTokenException) as ite:
+        with pytest.raises(InvalidTokenException) as ite:
             JWTHelper.decode(jwe, self.key_store, purpose=KEY_PURPOSE_AUTHENTICATION, check_claims=self.CHECK_CLAIMS)
 
-        if error not in ite.exception.value:
+        # Looks weird, but ite.value is an exception object.  The error message is contained in the 'value' attribute
+        # of that object.
+        if error not in ite.value.value:
             raise AssertionError(
-                '"{}" not found in decode exception. Actual exception message [{}]'.format(error, ite.exception.value))
+                '"{}" not found in decode exception. Actual exception message [{}]'.format(error, ite.value.value))
 
     def test_encode_with_dict_and_string(self):
         claims_as_dict = {
@@ -314,4 +316,4 @@ class TestTokenHelper(TestCase):  # pylint: disable=too-many-public-methods
         dict_token_decode = JWTHelper.decode(jwt_token=dict_token, key_store=self.key_store_secondary,
                                              purpose=KEY_PURPOSE_AUTHENTICATION)
 
-        self.assertEqual(string_token_decode, dict_token_decode)
+        assert string_token_decode == dict_token_decode

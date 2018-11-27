@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+cryptography = "*"
+jwcrypto = "*"
+PyYAML = "*"
+sdc-cryptography = {editable = true,path = "."}
+pathlib2 = "*"
+
+[dev-packages]
+pytest = "*"
+pytest-cov = "*"
+flake8 = "*"

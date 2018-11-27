@@ -1,4 +1,3 @@
-from unittest import TestCase
 from sdc.crypto.jwe_helper import JWEHelper
 
 from jwcrypto import jwk
@@ -58,18 +57,16 @@ encrypted_token = "eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00ifQ.OKOawDo13gRp2o
 
 
 # Unit test based of Example A.1 in RFC 7516 (https://tools.ietf.org/html/rfc7516#appendix-A.1)
-class TestFromRFC(TestCase):
-    def setUp(self):
-        pass
+class TestFromRFC:
 
     def test_plaintext_conversion(self):
-        self.assertEqual(plaintext, ''.join(chr(i) for i in plaintext_in_ascii))
+        assert plaintext == ''.join(chr(i) for i in plaintext_in_ascii)
 
     def test_decrypt(self):
         tokens = encrypted_token.split('.')
 
-        self.assertEqual(jwe_protected_header, tokens[0])
+        assert jwe_protected_header == tokens[0]
 
         key = jwk.JWK(**jwe_key_from_rfc_)
 
-        self.assertEqual(plaintext, JWEHelper.decrypt_with_key(encrypted_token, key=key))
+        assert plaintext == JWEHelper.decrypt_with_key(encrypted_token, key=key)

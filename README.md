@@ -6,19 +6,38 @@
 A common source code library for SDC services that use JWE. Apps wishing to use this should add the sdc_cryptography
 dependency to their requirements.txt and install with pip.
 
-### Basic Use
+### Basic Use (with pipenv, recommended)
 
-Assuming you are executing from inside an activated virtual environment:
+##### Install requirements:
 
-###### Install requirements:
-
+    $ pip install pipenv
     $ make build
 
-###### Run the unit tests:
+##### Run the unit tests:
+
+    $ pipenv run make test
+
+##### Create a package for deployment:
+
+    $ pipenv run make sdist
+
+
+### Basic Use (with activated virtual environment) 
+
+##### Install requirements:
+
+    These commands will generate a requirements file that pip can use.  It doesn't have to be
+    created this way but this is the easiest way.
+
+    $ pip install pipenv
+    $ pipenv lock -r --dev > requirements.txt
+    $ pip install -r requirements.txt
+
+##### Run the unit tests:
 
     $ make test
 
-###### Create a package for deployment:
+##### Create a package for deployment:
 
     $ make sdist
 
@@ -55,7 +74,7 @@ decrypted_json = decrypt(data_bytes, key_store, key_purpose)
 
 ###### PyPi
 
-This repo is available from PyPi at [sdc-cryptography]https://pypi.python.org/pypi/sdc-cryptography)
+This repo is available from PyPi at [sdc-cryptography](https://pypi.python.org/pypi/sdc-cryptography)
 
 The package is published automatically to PyPi when a tag is created in Github. The configuration for this is in the
 .travis.yml file.

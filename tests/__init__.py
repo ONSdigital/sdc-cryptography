@@ -57,6 +57,19 @@ VALID_JWE = "eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00iLCJraWQiOiJlMTkwOTEwNzJ
             "YIdIo013famiRIrs2peofThYZ3aGq-WatXHuBT1SJO_CV8gT8ifOLJX0UqH1wwVKjgfxelwtNOFNDe7Hq0iu2p-skwsI8P_N87RiByCue" \
             "Pw2HLVu4kzag21xtXnDz9rcPgeWiAS4ji9g.IM-8SjLJH-NFBLkg5EkAmg"
 
+TOO_FEW_TOKENS_JWE = "eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00iLCJraWQiOiJlMTkwOTEwNzJmOTIwY2JmM2NhOWY0MzZjZWJhMzA5ZTdkODE0Y" \
+                     "TYyIn0.SZG8UMNXYGnjppgGf1ok_O93Z_5qzKEZmn35pbStiDzAYdrUgg4Aa04B6ivDzPaZu-ROYTRw8UsroK8OEkySMDuHw0s63Z2AOZ" \
+                     "K6qviFfobxQFGnndEro9HrDTYMM9dpOt-_uFO0Ezuxyo7dkvRnAnRv4wy7Tqwu0CXtHcv5wzeUlGzh2OGR9nNK_6_2eRF8Lu3wuV5INa2" \
+                     "VSppU3xeQZQsuc1e-XoHi_fNzr8Lckmv9Cl5Z19BeC5DPhQb1IK8rRKyxIU8h65yoDEGfsD0Mf62wvdTFOldQ_gwCjSw3Piez_V2g9FUv" \
+                     "entQKVH28_pqBAZrUBj-Ma9FfNuWrJJo-w.1fsxK2D0kHa5RXW8.xO6V9QtVbKkBd9n75Bs0MugZ85oXVSqiKqwXEOc-_BqM0_1LtBbx9" \
+                     "Q6hsvwZ84f3vakIy4AiFPKhEY_ofbokEqMnFPEg0s2U7oux-vZcNU5Db4F_TO_3bMEetyUoPiOJeJztTI-an2A4oQjSB0rniXaaAI3buD" \
+                     "D43CvfS-SBuWHDQ6CD7ntca2hWzcO8YpnZsSKJad9FquHW_VpOj1nXnNh73q_qHXuB6USF5l3IPndep0KRwj8fUQTF9l358uWChJ2VtLK" \
+                     "_gvw_H7PSMdgHzpj1o4Nv22boVhnhtG7ns-tP53Lec01C_qAbRGnQ30eHZsbdpnAeIrOl9_2p_rjOO6ua5K5tnD2fQp1_8MXf1Ezbr1pc" \
+                     "p_gfk4eDJCxKblpn3Q22YtsF3qCtPS3Xz7izPz0UCK7EJy6yRU3UcLQ3YyTfCVRK1RJpgpyltCsABS6IRuw0OXmXHNy-GKB0w19hVeXU-" \
+                     "gcY7FH9ldespOEnruTaOSWB7tcMoKyAgH3nZqZbx0NMJiAcXFJowWSzcLtrfUOZ5nU5hnXretpD0VD45mnze4TVfvt1lCY-EGMoWM1HmW" \
+                     "YIdIo013famiRIrs2peofThYZ3aGq-WatXHuBT1SJO_CV8gT8ifOLJX0UqH1wwVKjgfxelwtNOFNDe7Hq0iu2p-skwsI8P_N87RiByCue" \
+                     "Pw2HLVu4kzag21xtXnDz9rcPgeWiAS4ji9g"
+
 TEST_DO_NOT_USE_UPSTREAM_PRIVATE_KEY = """-----BEGIN RSA PRIVATE KEY-----
 MIIEogIBAAKCAQEAvZzMraB96Wd1zfHS3vW3z//Nkqz+9HfwViNje2Y5L6m3K/7r
 aA0kUsWD1f6X7/LIJfkCEctCEj9q19+cX30h0pi6IOu92MlIwdH/L6CTuzYnG4PA
