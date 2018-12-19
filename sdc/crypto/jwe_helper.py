@@ -3,7 +3,7 @@ import logging
 from jwcrypto import jwe
 from jwcrypto.jwe import InvalidJWEData
 
-from sdc.crypto.exceptions import InvalidTokenException, MissingKeyException
+from sdc.crypto.exceptions import InvalidTokenException
 from sdc.crypto.helper import extract_kid_from_header
 
 logger = logging.getLogger(__name__)
@@ -25,8 +25,6 @@ class JWEHelper:
             logger.info("Decrypting JWE kid is {}".format(jwe_kid))
 
             private_jwk = key_store.get_private_key_by_kid(purpose, jwe_kid).as_jwk()
-            if not private_jwk:
-                raise MissingKeyException
 
             jwe_token.decrypt(private_jwk)
 
@@ -36,6 +34,12 @@ class JWEHelper:
 
     @staticmethod
     def decrypt_with_key(encrypted_token, key):
+        """
+        Decrypts JWE token with supplied key
+        :param encrypted_token:
+        :param key: A (:class:`jwcrypto.jwk.JWK`) decryption key or a password
+        :returns: The payload of the decrypted token
+        """
         try:
             jwe_token = jwe.JWE(algs=['RSA-OAEP', 'A256GCM'])
             jwe_token.deserialize(encrypted_token)
@@ -48,13 +52,10 @@ class JWEHelper:
 
     @staticmethod
     def encrypt(payload, kid, key_store=None, purpose=None):
-
         try:
             logger.info("Encrypting JWE kid is {}".format(kid))
 
             public_jwk = key_store.get_public_key_by_kid(purpose, kid).as_jwk()
-            if not public_jwk:
-                raise MissingKeyException
 
             protected_header = {
                 "alg": "RSA-OAEP",
@@ -73,7 +74,6 @@ class JWEHelper:
     @staticmethod
     def encrypt_with_key(payload, kid, key):
         try:
-
             logger.info("Encrypting JWE with provided key and kid {}".format(kid))
 
             protected_header = {

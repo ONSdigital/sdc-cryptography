@@ -28,7 +28,7 @@ def to_str(bytes_or_str):
     return value
 
 
-class Encoder(object):
+class Encoder:
 
     # password and key variables are dynamically assigned
     def __init__(self, private_key, public_key):

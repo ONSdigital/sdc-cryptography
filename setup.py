@@ -20,12 +20,8 @@ except ImportError:
         )
     )
 
-installRequirements = [
-    i.strip() for i in open(
-        os.path.join(os.path.dirname(__file__), "requirements.txt"), 'r'
-    ).readlines()
-]
-
+# For more info on pipenv and setuptools - https://realpython.com/pipenv-guide/#package-distribution
+# and https://pipenv.readthedocs.io/en/latest/advanced/#pipfile-vs-setup-py
 setup(
     name="sdc-cryptography",
     version=version,
@@ -44,15 +40,9 @@ setup(
     packages=[
         "sdc.crypto",
         "sdc.crypto.scripts",
-        "sdc.crypto.test",
     ],
-    package_data={
-        "sdc.crypto": [
-            "requirements.txt",
-        ],
-    },
     scripts=['sdc/crypto/scripts/generate_keys.py'],
-    install_requires=installRequirements,
+    install_requires=["jwcrypto", "cryptography", "PyYAML"],
     entry_points={
         "console_scripts": [
         ],

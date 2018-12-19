@@ -1,15 +1,19 @@
 language: python
+dist: xenial
 python:
+  - '3.7'
   - '3.6'
   - '3.5'
   - '3.4'
 sudo: required
+before_install:
+  - pip install pip==18.0
+  - pip install pipenv
 install:
   - make build
-  - pip install codecov
+  - pipenv install codecov
 script:
   - make test
-  - coverage run -m unittest sdc/crypto/test/test*.py
 deploy:
   - provider: pypi
     distributions: sdist bdist_wheel
