@@ -1,4 +1,6 @@
 ### Unreleased
+
+### 0.3.0 2018-12-19
 - Create public key IDs more consistently
 - Use pipenv and update unit test coverage
 - Unpin packages to allow for easier depedency upgrades
