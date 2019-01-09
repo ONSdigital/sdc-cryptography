@@ -1,4 +1,5 @@
 ### Unreleased
+- Update pyyaml dependency
 
 ### 0.3.0 2018-12-19
 - Create public key IDs more consistently
