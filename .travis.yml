@@ -4,10 +4,9 @@ python:
   - '3.7'
   - '3.6'
   - '3.5'
-  - '3.4'
 sudo: required
 before_install:
-  - pip install pip==18.0
+  - pip install pip
   - pip install pipenv
 install:
   - make build
