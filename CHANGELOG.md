@@ -1,4 +1,6 @@
 ### Unreleased
+- Update pyyaml due to CVE-2017-18342
+- Python 3.4 is no longer supported; the miniumum supported Python version is 3.5
 
 ### 0.3.0 2018-12-19
 - Create public key IDs more consistently

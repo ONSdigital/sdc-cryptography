@@ -6,55 +6,64 @@
 A common source code library for SDC services that use JWE. Apps wishing to use this should add the sdc_cryptography
 dependency to their requirements.txt and install with pip.
 
-### Basic Use (with pipenv, recommended)
+## Basic Use (with pipenv, recommended)
 
-##### Install requirements:
+### Install requirements
 
-    $ pip install pipenv
-    $ make build
+```bash
+pip install pipenv
+make build
+```
 
-##### Run the unit tests:
+### Run the unit tests
 
-    $ pipenv run make test
+```bash
+pipenv run make test
+```
 
-##### Create a package for deployment:
+### Create a package for deployment
 
-    $ pipenv run make sdist
+```bash
+pipenv run make sdist
+```
 
+## Basic Use (with activated virtual environment)
 
-### Basic Use (with activated virtual environment) 
+### Install requirements
 
-##### Install requirements:
+These commands will generate a requirements file that pip can use.  It doesn't have to be created this way but this is the easiest way.
 
-    These commands will generate a requirements file that pip can use.  It doesn't have to be
-    created this way but this is the easiest way.
+```bash
+pip install pipenv
+pipenv lock -r --dev > requirements.txt
+pip install -r requirements.txt
+```
 
-    $ pip install pipenv
-    $ pipenv lock -r --dev > requirements.txt
-    $ pip install -r requirements.txt
+### Run the unit tests
 
-##### Run the unit tests:
+```bash
+make test
+```
 
-    $ make test
+### Create a package for deployment
 
-##### Create a package for deployment:
-
-    $ make sdist
+```bash
+make sdist
+```
 
 ## Usage
 
 Need to generate a keys.yml file first.  Note, this requires a file system
 to store the file.  Then it needs to be loaded, and a key store generated.
-```
 
+```bash
 generate_keys.py <key_folder_location>
-
 ```
 
 After this has been configured, encrypting and decrypting can be done as in the
 example below.
-```python
 
+```python
 secrets_from_file = yaml.safe_load("keys.yml")
 
 validate_required_secrets(secrets_from_file, EXPECTED_SECRETS, KEY_PURPOSE_SUBMISSION)
@@ -69,10 +78,9 @@ encrypted_json = encrypt(json, key_store, key_purpose)
 from sdc.crypto.decrypter import decrypt
 data_bytes = data.decode('UTF8')
 decrypted_json = decrypt(data_bytes, key_store, key_purpose)
-
 ```
 
-###### PyPi
+## PyPi
 
 This repo is available from PyPi at [sdc-cryptography](https://pypi.python.org/pypi/sdc-cryptography)
 
