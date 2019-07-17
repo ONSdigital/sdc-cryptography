@@ -1,4 +1,6 @@
 ### Unreleased
+
+### 0.4.0 2019-07-17
 - Update pyyaml due to CVE-2017-18342
 - Python 3.4 is no longer supported; the miniumum supported Python version is 3.5
 
