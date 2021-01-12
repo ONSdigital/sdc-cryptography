@@ -39,7 +39,7 @@ class JWTHelper:
             raise InvalidTokenException(str(e)) from e
 
     @staticmethod
-    def encode(claims, kid, key_store, purpose):
+    def encode(claims, kid, key_store, purpose, compress=False):
         logger.info("Encoding JWT kid is {}".format(kid))
 
         private_jwk = key_store.get_private_key_by_kid(purpose, kid).as_jwk()
@@ -49,6 +49,10 @@ class JWTHelper:
             'typ': 'jwt',
             'alg': 'RS256',
         }
+
+        if compress:
+            header['zip'] = 'DEF'
+
         token = jwt.JWT(claims=claims, header=header)
 
         token.make_signed_token(private_jwk)
