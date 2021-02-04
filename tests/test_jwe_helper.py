@@ -145,7 +145,7 @@ class TestJWEHelper:
         encoder.cek = cek
         jwe = encoder.encrypt_token(VALID_SIGNED_JWT.encode(), self.kid)
 
-        self.assert_in_decrypt_exception(jwe.decode(), "Expected key of lenght 256, got 192")
+        self.assert_in_decrypt_exception(jwe.decode(), "Expected key of length 256, got 192")
 
     def test_authentication_tag_not_128_bits(self):
         encoder = Encoder(*self.encoder_args)
