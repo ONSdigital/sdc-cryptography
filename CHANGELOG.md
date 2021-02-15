@@ -1,5 +1,8 @@
 ### Unreleased
+
+### 1.0.0
 - Update packages to address vulnerabilities in cryptography package.
+- Bumped major version as this package is widely used in production applications
 
 ### 0.4.0 2019-07-17
 - Update pyyaml due to CVE-2017-18342
