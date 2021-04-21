@@ -21,5 +21,5 @@ deploy:
     password:
       secure: ms6ulxovGOxxC4JanJYv1sL/+UqrukFBBKW6TtPDHrQwQyyhHRNFkJuJeuUfPuWYYTRrK4bXsFGi6zehx6nr7+gFzL6t4a34pXAsGsqzT7/jSg5nOUst1gaE4QZSg5KUBTUBrDc939Q3Gxd89h89uxwtWV5SXqxOx0rLBmG+ZkbrsR1D/rRKI2BDxoSI1SNg+jjyIm0e9wVQg8tF19A3K1cnHFqITJh7fckQwuMgB+mD0q2H/9c/VYrpPW1u+25DPa6l/Ec0VRZKBHbQxZxXHx3Q9lnRPeBEIDWaBhw8fzi2JYkVtWlv1Npbogha8tOeB+RyEX78v58/IsKlwDJDl4bSV8EFfkb9KY6Coh+LpbpZz4i6ofotEYtfzTlyxmg8/itXySkOfayeJnE0SBG85ltxNUzcGmKusfZWyTnl1FyAk1DsY2ix3Aa8+KNHgmOBnFnCiogWULrzDinJtaHUwdWIHgDHup8DjUzPBAcR3v4xusnIFXXUuyOtmm7S0q9vvbsk//jd6a8KMcyoJ/Voytocs0ZWmNvln45VZP9Unh24tfoarhxQ2fPpY4JsgMEZobo1K9OtORVBwtT4w47NE/NWoi7WW/IPP6HKWL/iIBHJgFRhk7BMaE3KY2YtssIHzaj3U5kKKvdhpEFPPQuy5X79on1BwJ8N4/ESHsgwr8A=
     on:
-    branch: updating-pypi
+      branch: updating-pypi
       python: 3.9
