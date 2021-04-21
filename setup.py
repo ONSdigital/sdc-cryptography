@@ -27,7 +27,6 @@ setup(
     version=version,
     description="A shared library for SDC services that use JWT with JWE",
     author="ONS",
-    author_email="sdc@ons.gov.uk",
     url="https://github.com/ONSdigital/sdc-cryptography",
     long_description=__doc__,
     classifiers=[
