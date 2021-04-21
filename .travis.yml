@@ -17,9 +17,8 @@ script:
 deploy:
     provider: pypi
     distributions: sdist bdist_wheel
-    username: __token__
-    password:
-      secure: QSrhJwYuBdJKFu0eq98yzEbdVYEO51R+4TwmHrXU0l9jOlSDYGfNZn2tD87Wt/xekCUho86cyx1aVMDFmvYlqMwdi0UWBjqhGYvYOeyhPdLpn9r9KlrhxZywn/tnbJ1M3s2DY05cDTBrxXTV2ZDxmaonk3iTfzkccOQD0zUlnINv5H4PIV4HXNBiZldqLz24wqfbgBxyxSRjydYP8weNBhlzinyiMsj8ucUVKFMdj4Va6rg5ob+zJ45mMYAWz6vMjppbEaeddJt9tvOg1mXTIJmS6JjmpGfMMtWAJ1PqUqkMQKSarW5TdxlqXFEA6SUuVLhdUQEIRSZwOJaAWs/OpSlWPhfEEO2kDstaDlE2sNkFnS4kYZiPxtEPlnrIB93JSDeSALlEnHyNkgJRBjda4jAaoMcwwnNNYkVtJq3ysrlEQHY+5LTQG0saAOHA2BktCRnw9Tecc9ngSTyx7L0aZlBFBsZdORX4THOsiAovyqng0tQ6mVSJxp//CvHsqjrAxZQ7nCjbz7O4WH3VVkStYCV2/RCR67YGc6E7GSbXj1azfG+MHL9n6LqgvLjAVE3MtIMGSSoFtutrOWn89yoxynRxlIfoBoAYMhPW0p6/MYg7IDtxM0GHzqaTVKNtwsceV/Ck19BLmOLvSbaABGG3bqorZwe6eo28N9IU6ZexeJ8=
+    username: $PYPI_USERNAME
+    password: $PYPI_PASSWORD
     on:
       tags: true
       python: 3.9
