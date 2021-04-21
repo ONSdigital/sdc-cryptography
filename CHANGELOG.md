@@ -1,7 +1,7 @@
 ### Unreleased
 
-### 1.0.6
-- Release to facilitate Travis Pypi deployment.
+### 1.1.0
+- Release to facilitate a Travis Pypi deployment.
 
 ### 1.0.0
 - Update packages to address vulnerabilities in cryptography package.
