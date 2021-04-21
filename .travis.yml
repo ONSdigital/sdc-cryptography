@@ -17,8 +17,8 @@ script:
 deploy:
     provider: pypi
     distributions: sdist bdist_wheel
-    username: "__token__"
-    password: "$PYPI_API_TOKEN"
+    username: __token__
+    password: $PYPI_API_TOKEN
     on:
       tags: true
       python: 3.9
