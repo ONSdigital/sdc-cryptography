@@ -1,6 +1,6 @@
 ### Unreleased
 
-### 1.1.0
+### 1.0.7
 - Release to facilitate a Travis Pypi deployment.
 
 ### 1.0.0
