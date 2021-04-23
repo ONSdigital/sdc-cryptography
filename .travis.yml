@@ -19,6 +19,7 @@ deploy:
     distributions: sdist bdist_wheel
     username: __token__
     password: $PYPI_API_TOKEN
+    skip_existing: true
     on:
       tags: true
-      python: 3.9
+      
