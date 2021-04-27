@@ -26,15 +26,15 @@ setup(
     name="sdc-cryptography",
     version=version,
     description="A shared library for SDC services that use JWT with JWE",
-    author="W Bailey",
-    author_email="warren@warrenbailey.net",
+    author="ONS",
     url="https://github.com/ONSdigital/sdc-cryptography",
     long_description=__doc__,
     classifiers=[
         "Operating System :: OS Independent",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "License :: OSI Approved :: MIT License",
     ],
     packages=[

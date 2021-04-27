@@ -82,7 +82,7 @@ decrypted_json = decrypt(data_bytes, key_store, key_purpose)
 
 ## PyPi
 
-This repo is available from PyPi at [sdc-cryptography](https://pypi.python.org/pypi/sdc-cryptography)
+This repo is available from PyPi at [sdc-cryptography](https://pypi.org/project/sdc-cryptography/)
 
 The package is published automatically to PyPi when a tag is created in Github. The configuration for this is in the
 .travis.yml file.
