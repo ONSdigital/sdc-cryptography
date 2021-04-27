@@ -1,4 +1,6 @@
 ### Unreleased
+- Deprecate Travis CI integration
+- Add Github Actions workflows
 
 ### 1.0.9
 - Release to facilitate a Travis Pypi deployment.
