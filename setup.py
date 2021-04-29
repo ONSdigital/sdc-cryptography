@@ -13,12 +13,18 @@ except ImportError:
     # For pip installations
     version = str(
         ast.literal_eval(
-            open(os.path.join(
-                os.path.dirname(__file__),
-                "sdc", "crypto", "__init__.py"),
-                'r').read().split("=")[-1].strip()
+            open(
+                os.path.join(os.path.dirname(__file__), "sdc", "crypto", "__init__.py"),
+                "r",
+            )
+            .read()
+            .split("=")[-1]
+            .strip()
         )
     )
+
+with open("./README.md") as fp:
+    description = fp.read()
 
 # For more info on pipenv and setuptools - https://realpython.com/pipenv-guide/#package-distribution
 # and https://pipenv.readthedocs.io/en/latest/advanced/#pipfile-vs-setup-py
@@ -28,7 +34,8 @@ setup(
     description="A shared library for SDC services that use JWT with JWE",
     author="ONS",
     url="https://github.com/ONSdigital/sdc-cryptography",
-    long_description=__doc__,
+    long_description=description,
+    long_description_content_type="text/markdown",
     classifiers=[
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3.6",
@@ -41,12 +48,11 @@ setup(
         "sdc.crypto",
         "sdc.crypto.scripts",
     ],
-    scripts=['sdc/crypto/scripts/generate_keys.py'],
+    scripts=["sdc/crypto/scripts/generate_keys.py"],
     install_requires=["jwcrypto", "cryptography", "PyYAML"],
     entry_points={
-        "console_scripts": [
-        ],
+        "console_scripts": [],
     },
     namespace_packages=["sdc"],
-    zip_safe=False
+    zip_safe=False,
 )
