@@ -44,19 +44,24 @@ class TestTokenHelper:
         "keys": {
             "e19091072f920cbf3ca9f436ceba309e7d814a62": {'purpose': KEY_PURPOSE_AUTHENTICATION,
                                                          'type': 'private',
-                                                         'value': TEST_DO_NOT_USE_SR_PRIVATE_PEM},
+                                                         'value': TEST_DO_NOT_USE_SR_PRIVATE_PEM,
+                                                         'service': 'blah'},
             "EQ_USER_AUTHENTICATION_SR_PRIVATE_KEY": {'purpose': KEY_PURPOSE_AUTHENTICATION,
                                                       'type': 'private',
-                                                      'value': TEST_DO_NOT_USE_SR_PRIVATE_PEM},
+                                                      'value': TEST_DO_NOT_USE_SR_PRIVATE_PEM,
+                                                      'service': 'blah'},
             "EDCRRM": {'purpose': KEY_PURPOSE_AUTHENTICATION,
                        'type': 'public',
-                       'value': TEST_DO_NOT_USE_PUBLIC_KEY},
+                       'value': TEST_DO_NOT_USE_PUBLIC_KEY,
+                       'service': 'blah'},
             "709eb42cfee5570058ce0711f730bfbb7d4c8ade": {'purpose': KEY_PURPOSE_AUTHENTICATION,
                                                          'type': 'public',
-                                                         'value': TEST_DO_NOT_USE_UPSTREAM_PUBLIC_PEM},
+                                                         'value': TEST_DO_NOT_USE_UPSTREAM_PUBLIC_PEM,
+                                                         'service': 'blah'},
             "EQ_USER_AUTHENTICATION_EQ_KEY": {'purpose': KEY_PURPOSE_AUTHENTICATION,
                                               'type': 'private',
-                                              'value': TEST_DO_NOT_USE_EQ_PRIVATE_KEY},
+                                              'value': TEST_DO_NOT_USE_EQ_PRIVATE_KEY,
+                                              'service': 'blah'},
 
         }
     })
@@ -64,7 +69,8 @@ class TestTokenHelper:
         "keys": {
             "EQ_USER_AUTHENTICATION_EQ_KEY": {'purpose': KEY_PURPOSE_AUTHENTICATION,
                                               'type': 'public',
-                                              'value': TEST_DO_NOT_USE_EQ_PUBLIC_KEY},
+                                              'value': TEST_DO_NOT_USE_EQ_PUBLIC_KEY,
+                                              'service': 'blah'},
         }
     })
 

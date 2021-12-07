@@ -25,11 +25,12 @@ def validate_required_keys(keys, key_purpose):
 
 
 class Key:
-    def __init__(self, kid, purpose, key_type, value):
+    def __init__(self, kid, purpose, key_type, value, service):
         self.kid = kid
         self.purpose = purpose
         self.key_type = key_type
         self.value = value
+        self.service = service
 
     def as_jwk(self):
         return jwk.JWK.from_pem(self.value.encode('utf-8'))
@@ -38,7 +39,7 @@ class Key:
 class KeyStore:
     def __init__(self, keys):
         try:
-            self.keys = {kid: Key(kid, key['purpose'], key['type'], key['value']) for kid, key in keys['keys'].items()}
+            self.keys = {kid: Key(kid, key['purpose'], key['type'], key['value'], key['service']) for kid, key in keys['keys'].items()}
         except KeyError as e:
             logger.warning("Missing mandatory key values")
             raise CryptoError from e
@@ -66,6 +67,18 @@ class KeyStore:
         :returns: A key object that matches the criteria
         """
         key = [key for key in self.keys.values() if key.purpose == purpose and key.key_type == key_type]
+        try:
+            return key[0]
+        except IndexError:
+            return None
+
+    def get_key_for_purpose_type_and_service(self, purpose, key_type, service):
+        """
+        Gets a list of keys that match the purpose, key_type and service, and returns the first key in that list
+        Note, if there are many keys that match the criteria, the one you get back will be random from that list
+        :returns: A key object that matches the criteria
+        """
+        key = [key for key in self.keys.values() if key.purpose == purpose and key.key_type == key_type and key.service == service]
         try:
             return key[0]
         except IndexError:

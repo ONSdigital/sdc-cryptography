@@ -22,16 +22,25 @@ class TestKeyStore:
         "keys": {
             "e19091072f920cbf3ca9f436ceba309e7d814a62": {'purpose': KEY_PURPOSE_AUTHENTICATION,
                                                          'type': 'private',
-                                                         'value': TEST_DO_NOT_USE_SR_PRIVATE_PEM},
+                                                         'value': TEST_DO_NOT_USE_SR_PRIVATE_PEM,
+                                                         'service': 'blah'},
             "EQ_USER_AUTHENTICATION_SR_PRIVATE_KEY": {'purpose': KEY_PURPOSE_AUTHENTICATION,
                                                       'type': 'private',
-                                                      'value': TEST_DO_NOT_USE_SR_PRIVATE_PEM},
+                                                      'value': TEST_DO_NOT_USE_SR_PRIVATE_PEM,
+                                                      'service': 'blah'},
             "EDCRRM": {'purpose': KEY_PURPOSE_AUTHENTICATION,
                        'type': 'public',
-                       'value': TEST_DO_NOT_USE_PUBLIC_KEY},
+                       'value': TEST_DO_NOT_USE_PUBLIC_KEY,
+                       'service': 'blah'},
+
             "709eb42cfee5570058ce0711f730bfbb7d4c8ade": {'purpose': KEY_PURPOSE_AUTHENTICATION,
                                                          'type': 'public',
-                                                         'value': TEST_DO_NOT_USE_UPSTREAM_PUBLIC_PEM},
+                                                         'value': TEST_DO_NOT_USE_UPSTREAM_PUBLIC_PEM,
+                                                         'service': 'blah'},
+            "KID_FOR_EQ_V2": {'purpose': KEY_PURPOSE_AUTHENTICATION,
+                              'type': 'public',
+                              'value': TEST_DO_NOT_USE_PUBLIC_KEY,
+                              'service': 'eq_v2'},
         }
     })
 
@@ -54,9 +63,25 @@ class TestKeyStore:
         assert result.key_type == "private"
         assert result.value == TEST_DO_NOT_USE_SR_PRIVATE_PEM
 
+    def test_get_key_for_purpose_type_and_service(self):
+        """
+        Test that we get a key if there is one in the store that matches the criteria
+        Note that if there are many, you'll get a random one.
+        """
+        result = self.key_store.get_key_for_purpose_type_and_service(KEY_PURPOSE_AUTHENTICATION, "public", "eq_v2")
+        assert result.kid == "KID_FOR_EQ_V2"
+        assert result.purpose == KEY_PURPOSE_AUTHENTICATION
+        assert result.key_type == "public"
+        assert result.value == TEST_DO_NOT_USE_PUBLIC_KEY
+
     def test_get_key_for_purpose_and_type_not_found(self):
         """Test that None is returned if no keys in the store have both the specified key_type and purpose"""
         result = self.key_store.get_key_for_purpose_and_type(KEY_PURPOSE_SUBMISSION, "private")
+        assert result is None
+
+    def test_get_key_for_purpose_type_and_service_not_found(self):
+        """Test that None is returned if no keys in the store have both the specified key_type, purpose and service"""
+        result = self.key_store.get_key_for_purpose_type_and_service(KEY_PURPOSE_SUBMISSION, "private", "eq_v3")
         assert result is None
 
     @staticmethod
