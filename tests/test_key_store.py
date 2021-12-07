@@ -22,8 +22,8 @@ class TestKeyStore:
         "keys": {
             "e19091072f920cbf3ca9f436ceba309e7d814a62": {'purpose': KEY_PURPOSE_AUTHENTICATION,
                                                          'type': 'private',
-                                                         'value': TEST_DO_NOT_USE_SR_PRIVATE_PEM,
-                                                         'service': 'blah'},
+                                                         'value': TEST_DO_NOT_USE_SR_PRIVATE_PEM
+                                                         },
             "EQ_USER_AUTHENTICATION_SR_PRIVATE_KEY": {'purpose': KEY_PURPOSE_AUTHENTICATION,
                                                       'type': 'private',
                                                       'value': TEST_DO_NOT_USE_SR_PRIVATE_PEM,
@@ -52,12 +52,12 @@ class TestKeyStore:
         with pytest.raises(InvalidTokenException):
             self.key_store.get_key_by_kid(KEY_PURPOSE_SUBMISSION, "e19091072f920cbf3ca9f436ceba309e7d814a62", "private")
 
-    def test_get_key_for_purpose_and_type(self):
+    def test_get_key_for_purpose_and_type_no_service(self):
         """
         Test that we get a key if there is one in the store that matches the criteria
         Note that if there are many, you'll get a random one.
         """
-        result = self.key_store.get_key_for_purpose_and_type(KEY_PURPOSE_AUTHENTICATION, "private")
+        result = self.key_store.get_key_for_purpose(KEY_PURPOSE_AUTHENTICATION, "private")
         assert result.kid in ["e19091072f920cbf3ca9f436ceba309e7d814a62", "EQ_USER_AUTHENTICATION_SR_PRIVATE_KEY"]
         assert result.purpose == KEY_PURPOSE_AUTHENTICATION
         assert result.key_type == "private"
@@ -68,7 +68,7 @@ class TestKeyStore:
         Test that we get a key if there is one in the store that matches the criteria
         Note that if there are many, you'll get a random one.
         """
-        result = self.key_store.get_key_for_purpose_type_and_service(KEY_PURPOSE_AUTHENTICATION, "public", "eq_v2")
+        result = self.key_store.get_key_for_purpose(KEY_PURPOSE_AUTHENTICATION, "public", "eq_v2")
         assert result.kid == "KID_FOR_EQ_V2"
         assert result.purpose == KEY_PURPOSE_AUTHENTICATION
         assert result.key_type == "public"
@@ -76,12 +76,12 @@ class TestKeyStore:
 
     def test_get_key_for_purpose_and_type_not_found(self):
         """Test that None is returned if no keys in the store have both the specified key_type and purpose"""
-        result = self.key_store.get_key_for_purpose_and_type(KEY_PURPOSE_SUBMISSION, "private")
+        result = self.key_store.get_key_for_purpose(KEY_PURPOSE_SUBMISSION, "private")
         assert result is None
 
     def test_get_key_for_purpose_type_and_service_not_found(self):
         """Test that None is returned if no keys in the store have both the specified key_type, purpose and service"""
-        result = self.key_store.get_key_for_purpose_type_and_service(KEY_PURPOSE_SUBMISSION, "private", "eq_v3")
+        result = self.key_store.get_key_for_purpose(KEY_PURPOSE_SUBMISSION, "private", "eq_v3")
         assert result is None
 
     @staticmethod

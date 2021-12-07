@@ -25,7 +25,7 @@ def validate_required_keys(keys, key_purpose):
 
 
 class Key:
-    def __init__(self, kid, purpose, key_type, value, service):
+    def __init__(self, kid, purpose, key_type, value, service=None):
         self.kid = kid
         self.purpose = purpose
         self.key_type = key_type
@@ -39,7 +39,10 @@ class Key:
 class KeyStore:
     def __init__(self, keys):
         try:
-            self.keys = {kid: Key(kid, key['purpose'], key['type'], key['value'], key['service']) for kid, key in keys['keys'].items()}
+            self.keys = {
+                kid: Key(kid, key['purpose'], key['type'], key['value'], key.get('service')) for kid, key in keys['keys'].items()
+            }
+
         except KeyError as e:
             logger.warning("Missing mandatory key values")
             raise CryptoError from e
@@ -60,25 +63,19 @@ class KeyStore:
         else:
             return key
 
-    def get_key_for_purpose_and_type(self, purpose, key_type):
+    def get_key_for_purpose(self, purpose, key_type, service=None):
         """
-        Gets a list of keys that match the purpose and key_type, and returns the first key in that list
+        Gets a list of keys that match the search criteria, and returns the first key in that list
         Note, if there are many keys that match the criteria, the one you get back will be random from that list
         :returns: A key object that matches the criteria
         """
-        key = [key for key in self.keys.values() if key.purpose == purpose and key.key_type == key_type]
-        try:
-            return key[0]
-        except IndexError:
-            return None
 
-    def get_key_for_purpose_type_and_service(self, purpose, key_type, service):
-        """
-        Gets a list of keys that match the purpose, key_type and service, and returns the first key in that list
-        Note, if there are many keys that match the criteria, the one you get back will be random from that list
-        :returns: A key object that matches the criteria
-        """
-        key = [key for key in self.keys.values() if key.purpose == purpose and key.key_type == key_type and key.service == service]
+        keys = self.keys.values()
+
+        if service:
+            key = [key for key in keys if key.purpose == purpose and key.key_type == key_type and key.service == service]
+        else:
+            key = [key for key in keys if key.purpose == purpose and key.key_type == key_type]
         try:
             return key[0]
         except IndexError:
