@@ -76,7 +76,7 @@ encrypted_json = encrypt(json, key_store, key_purpose)
 
 # Encrypt JSON with encryption service (Purpose has a multiple keys)
 from sdc.crypto.encrypter import encrypt
-encrypted_json = encrypt(json, key_store, key_purpose, encryption_service="some-service")
+encrypted_json = encrypt(json, key_store, key_purpose, encryption_for_service="some-service")
 
 # Decrypt UTF8 jwe token
 from sdc.crypto.decrypter import decrypt
