@@ -42,19 +42,19 @@ class TestJWEHelper:
             "e19091072f920cbf3ca9f436ceba309e7d814a62": {'purpose': KEY_PURPOSE_AUTHENTICATION,
                                                          'type': 'private',
                                                          'value': TEST_DO_NOT_USE_SR_PRIVATE_PEM,
-                                                         'service': 'blah'},
+                                                         'service': 'some-service'},
             "EQ_USER_AUTHENTICATION_SR_PRIVATE_KEY": {'purpose': KEY_PURPOSE_AUTHENTICATION,
                                                       'type': 'private',
                                                       'value': TEST_DO_NOT_USE_SR_PRIVATE_PEM,
-                                                      'service': 'blah'},
+                                                      'service': 'some-service'},
             "EDCRRM": {'purpose': KEY_PURPOSE_AUTHENTICATION,
                        'type': 'public',
                        'value': TEST_DO_NOT_USE_PUBLIC_KEY,
-                       'service': 'blah'},
+                       'service': 'some-service'},
             "709eb42cfee5570058ce0711f730bfbb7d4c8ade": {'purpose': KEY_PURPOSE_AUTHENTICATION,
                                                          'type': 'public',
                                                          'value': TEST_DO_NOT_USE_UPSTREAM_PUBLIC_PEM,
-                                                         'service': 'blah'},
+                                                         'service': 'some-service'},
         }
     })
 

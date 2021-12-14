@@ -13,4 +13,4 @@ sdist:
 
 test:
 	flake8 .
-	pytest -v --cov-report term-missing --cov sdc.crypto --cov-fail-under=84
+	pytest -v --cov-report term-missing --cov sdc.crypto --cov-fail-under=87

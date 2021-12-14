@@ -40,7 +40,10 @@ class KeyStore:
     def __init__(self, keys):
         try:
             self.keys = {
-                kid: Key(kid, key['purpose'], key['type'], key['value'], key.get('service')) for kid, key in keys['keys'].items()
+                kid: Key(
+                    kid, key["purpose"], key["type"], key["value"], key.get("service")
+                )
+                for kid, key in keys["keys"].items()
             }
 
         except KeyError as e:
@@ -63,7 +66,7 @@ class KeyStore:
         else:
             return key
 
-    def get_key_for_purpose(self, purpose, key_type, service=None):
+    def get_key(self, *, purpose, key_type, service=None):
         """
         Gets a list of keys that match the search criteria, and returns the first key in that list
         Note, if there are many keys that match the criteria, the one you get back will be random from that list
@@ -72,10 +75,13 @@ class KeyStore:
 
         keys = self.keys.values()
 
-        if service:
-            key = [key for key in keys if key.purpose == purpose and key.key_type == key_type and key.service == service]
-        else:
-            key = [key for key in keys if key.purpose == purpose and key.key_type == key_type]
+        key = [
+            key
+            for key in keys
+            if key.purpose == purpose
+            and key.key_type == key_type
+            and (not service or key.service == service)
+        ]
         try:
             return key[0]
         except IndexError:

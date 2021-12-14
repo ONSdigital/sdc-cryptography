@@ -70,9 +70,13 @@ validate_required_secrets(secrets_from_file, EXPECTED_SECRETS, KEY_PURPOSE_SUBMI
 
 key_store = KeyStore(secrets_from_file)
 
-# Encrypt json
+# Encrypt JSON (Purpose has a single key)
 from sdc.crypto.encrypter import encrypt
 encrypted_json = encrypt(json, key_store, key_purpose)
+
+# Encrypt JSON with encryption service (Purpose has a multiple keys)
+from sdc.crypto.encrypter import encrypt
+encrypted_json = encrypt(json, key_store, key_purpose, encryption_service="some-service")
 
 # Decrypt UTF8 jwe token
 from sdc.crypto.decrypter import decrypt

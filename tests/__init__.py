@@ -1,3 +1,5 @@
+from sdc.crypto.key_store import KeyStore
+
 TEST_DO_NOT_USE_SR_PRIVATE_PEM = """-----BEGIN RSA PRIVATE KEY-----
 MIIEogIBAAKCAQEAt8LZnIhuOdL/BC029GOaJkVUAqgp2PcmbFr2Qwhf/514DUUQ
 9sKJ1rvwvbmmW2zE8JRtdY3ey0RXGtMn5UZHs8NReHzMxvsmHN4VuaGEnFmPwO82
@@ -149,3 +151,50 @@ livlorbF2L8+LF01V7GhkrwXV+gBitIo7c2bGJjVVKIlJNK8aYqm2vnyli/J8ClS
 vQIDAQAB
 -----END PUBLIC KEY-----
 """
+
+
+# jwt.io public key signed
+TEST_DO_NOT_USE_PUBLIC_KEY = """-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDdlatRjRjogo3Wojg
+GHFHYLugdUWAY9iR3fy4arWNA1KoS8kVw33cJibXr8bvwUAUparCwlv
+dbH6dvEOfou0/gCFQsHUfQrSDv+MuSUMAe8jzKE4qW+jK+xQU9a03GU
+nKHkkle+Q0pX/g6jXZ7r1/xAK5Do2kQ+X5xK9cipRgEKwIDAQAB
+-----END PUBLIC KEY-----"""
+
+
+def get_mock_key_store(key_purpose):
+    return KeyStore(
+        {
+            "keys": {
+                "e19091072f920cbf3ca9f436ceba309e7d814a62": {
+                    "purpose": key_purpose,
+                    "type": "private",
+                    "value": TEST_DO_NOT_USE_SR_PRIVATE_PEM,
+                },
+                "EQ_USER_AUTHENTICATION_SR_PRIVATE_KEY": {
+                    "purpose": key_purpose,
+                    "type": "private",
+                    "value": TEST_DO_NOT_USE_SR_PRIVATE_PEM,
+                    "service": "some-service",
+                },
+                "EDCRRM": {
+                    "purpose": key_purpose,
+                    "type": "public",
+                    "value": TEST_DO_NOT_USE_PUBLIC_KEY,
+                    "service": "some-service",
+                },
+                "709eb42cfee5570058ce0711f730bfbb7d4c8ade": {
+                    "purpose": key_purpose,
+                    "type": "public",
+                    "value": TEST_DO_NOT_USE_UPSTREAM_PUBLIC_PEM,
+                    "service": "some-service",
+                },
+                "KID_FOR_EQ_V2": {
+                    "purpose": key_purpose,
+                    "type": "public",
+                    "value": TEST_DO_NOT_USE_PUBLIC_KEY,
+                    "service": "eq_v2",
+                },
+            }
+        }
+    )
