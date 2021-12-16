@@ -1,39 +1,16 @@
 import pytest
-
-from sdc.crypto.key_store import KeyStore, validate_required_keys
 from sdc.crypto.exceptions import CryptoError, InvalidTokenException
-from tests import TEST_DO_NOT_USE_UPSTREAM_PUBLIC_PEM, TEST_DO_NOT_USE_SR_PRIVATE_PEM
+from sdc.crypto.key_store import KeyStore, validate_required_keys
+from tests import TEST_DO_NOT_USE_SR_PRIVATE_PEM
+from tests import get_mock_key_store, TEST_DO_NOT_USE_PUBLIC_KEY
 
 KEY_PURPOSE_AUTHENTICATION = "authentication"
 KEY_PURPOSE_SUBMISSION = "submission"
 
-# jwt.io public key signed
-TEST_DO_NOT_USE_PUBLIC_KEY = """-----BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDdlatRjRjogo3Wojg
-GHFHYLugdUWAY9iR3fy4arWNA1KoS8kVw33cJibXr8bvwUAUparCwlv
-dbH6dvEOfou0/gCFQsHUfQrSDv+MuSUMAe8jzKE4qW+jK+xQU9a03GU
-nKHkkle+Q0pX/g6jXZ7r1/xAK5Do2kQ+X5xK9cipRgEKwIDAQAB
------END PUBLIC KEY-----"""
-
 
 class TestKeyStore:
 
-    key_store = KeyStore({
-        "keys": {
-            "e19091072f920cbf3ca9f436ceba309e7d814a62": {'purpose': KEY_PURPOSE_AUTHENTICATION,
-                                                         'type': 'private',
-                                                         'value': TEST_DO_NOT_USE_SR_PRIVATE_PEM},
-            "EQ_USER_AUTHENTICATION_SR_PRIVATE_KEY": {'purpose': KEY_PURPOSE_AUTHENTICATION,
-                                                      'type': 'private',
-                                                      'value': TEST_DO_NOT_USE_SR_PRIVATE_PEM},
-            "EDCRRM": {'purpose': KEY_PURPOSE_AUTHENTICATION,
-                       'type': 'public',
-                       'value': TEST_DO_NOT_USE_PUBLIC_KEY},
-            "709eb42cfee5570058ce0711f730bfbb7d4c8ade": {'purpose': KEY_PURPOSE_AUTHENTICATION,
-                                                         'type': 'public',
-                                                         'value': TEST_DO_NOT_USE_UPSTREAM_PUBLIC_PEM},
-        }
-    })
+    key_store = get_mock_key_store(KEY_PURPOSE_AUTHENTICATION)
 
     def test_get_key_by_kid_with_incorrect_type(self):
         with pytest.raises(InvalidTokenException):
@@ -43,20 +20,37 @@ class TestKeyStore:
         with pytest.raises(InvalidTokenException):
             self.key_store.get_key_by_kid(KEY_PURPOSE_SUBMISSION, "e19091072f920cbf3ca9f436ceba309e7d814a62", "private")
 
-    def test_get_key_for_purpose_and_type(self):
+    def test_get_key_with_purpose_and_type_no_service(self):
         """
         Test that we get a key if there is one in the store that matches the criteria
         Note that if there are many, you'll get a random one.
         """
-        result = self.key_store.get_key_for_purpose_and_type(KEY_PURPOSE_AUTHENTICATION, "private")
+        result = self.key_store.get_key(purpose=KEY_PURPOSE_AUTHENTICATION, key_type="private")
         assert result.kid in ["e19091072f920cbf3ca9f436ceba309e7d814a62", "EQ_USER_AUTHENTICATION_SR_PRIVATE_KEY"]
         assert result.purpose == KEY_PURPOSE_AUTHENTICATION
         assert result.key_type == "private"
         assert result.value == TEST_DO_NOT_USE_SR_PRIVATE_PEM
 
-    def test_get_key_for_purpose_and_type_not_found(self):
-        """Test that None is returned if no keys in the store have both the specified key_type and purpose"""
-        result = self.key_store.get_key_for_purpose_and_type(KEY_PURPOSE_SUBMISSION, "private")
+    def test_get_key_with_purpose_type_and_service(self):
+        """
+        Test that we get a key if there is one in the store that matches the criteria
+        Note that if there are many, you'll get a random one.
+        """
+        result = self.key_store.get_key(purpose=KEY_PURPOSE_AUTHENTICATION, key_type="public", service="eq_v2")
+        assert result.kid == "KID_FOR_EQ_V2"
+        assert result.purpose == KEY_PURPOSE_AUTHENTICATION
+        assert result.key_type == "public"
+        assert result.value == TEST_DO_NOT_USE_PUBLIC_KEY
+
+    @pytest.mark.parametrize(
+        "service",
+        ["eq_v3", None],
+    )
+    def test_get_key_not_found(self, service):
+        """Test that None is returned if no keys in the store matches the criteria"""
+        result = self.key_store.get_key(
+            purpose=KEY_PURPOSE_SUBMISSION, key_type="private", service=service
+        )
         assert result is None
 
     @staticmethod
