@@ -193,7 +193,7 @@ class TestTokenHelper:
     def test_signature_corrupt(self):
         jwt = jwtio_header + "." + jwtio_payload + ".asdasddas"
 
-        self.assert_in_decode_signed_jwt_exception(jwt, "Invalid base64 string")
+        self.assert_in_decode_signed_jwt_exception(jwt, "Invalid JWS Object")
 
     def test_payload_contains_malformed_json(self):
         payload = base64.urlsafe_b64encode(b'{"user":"jimmy,"iat": "1454935765","exp": "2075297148"')
