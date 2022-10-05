@@ -103,35 +103,35 @@ class TestTokenHelper:
     def test_jwt_contains_empty_payload(self):
         token_without_payload = jwtio_header + ".e30." + jwtio_signature
 
-        self.assert_in_decode_signed_jwt_exception(token_without_payload, "InvalidSignature")
+        self.assert_in_decode_signed_jwt_exception(token_without_payload, "InvalidJWSSignature")
 
     def test_jwt_does_not_contain_payload(self):
         token_without_payload = jwtio_header + ".." + jwtio_signature
 
-        self.assert_in_decode_signed_jwt_exception(token_without_payload, "InvalidSignature")
+        self.assert_in_decode_signed_jwt_exception(token_without_payload, "InvalidJWSSignature")
 
     def test_jwt_does_not_contain_signature(self):
         jwt = jwtio_header + "." + jwtio_payload + ".e30"
 
-        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidSignature")
+        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidJWSSignature")
 
     def test_jose_header_missing_type(self):
         header = base64.urlsafe_b64encode(b'{"alg":"RS256", "kid":"EDCRRM"}')
         jwt = header.decode() + "." + jwtio_payload + "." + jwtio_signature
 
-        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidSignature")
+        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidJWSSignature")
 
     def test_jose_header_invalid_type(self):
         header = base64.urlsafe_b64encode(b'{"alg":"RS256", "kid":"EDCRRM", "typ":"TEST"}')
         jwt = header.decode() + "." + jwtio_payload + "." + jwtio_signature
 
-        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidSignature")
+        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidJWSSignature")
 
     def test_jose_header_contains_multiple_type(self):
         header = base64.urlsafe_b64encode(b'{"alg":"RS256", "kid":"EDCRRM","typ":"JWT","typ":"TEST"}')
         jwt = header.decode() + "." + jwtio_payload + "." + jwtio_signature
 
-        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidSignature")
+        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidJWSSignature")
 
     def test_jose_header_missing_alg(self):
         header = base64.urlsafe_b64encode(b'{"kid":"EDCRRM","typ":"JWT"}')
@@ -167,7 +167,7 @@ class TestTokenHelper:
         header = base64.urlsafe_b64encode(b'{"alg":"RS256", "kid":"test", "kid":"EDCRRM", "typ":"JWT"}')
         jwt = header.decode() + "." + jwtio_payload + "." + jwtio_signature
 
-        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidSignature")
+        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidJWSSignature")
 
     def test_jose_header_contains_invalid_kid(self):
         header = base64.urlsafe_b64encode(b'{"alg":"RS256", "kid":"UNKNOWN", "typ":"JWT"}')
@@ -178,12 +178,12 @@ class TestTokenHelper:
     def test_signature_not_2048_bits(self):
         jwt = jwtio_header + "." + jwtio_payload + "." + base64.urlsafe_b64encode(os.urandom(255)).decode()
 
-        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidSignature")
+        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidJWSSignature")
 
     def test_payload_corrupt(self):
         jwt = jwtio_header + ".asdasd." + jwtio_signature
 
-        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidSignature")
+        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidJWSSignature")
 
     def test_header_corrupt(self):
         jwt = "asdsadsa" + "." + jwtio_payload + "." + jwtio_signature
@@ -199,13 +199,13 @@ class TestTokenHelper:
         payload = base64.urlsafe_b64encode(b'{"user":"jimmy,"iat": "1454935765","exp": "2075297148"')
         jwt = jwtio_header + "." + payload.decode() + "." + jwtio_signature
 
-        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidSignature")
+        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidJWSSignature")
 
     def test_payload_contains_corrupted_json(self):
         payload = base64.urlsafe_b64encode(b'{"user":"jimmy","iat": "1454935765","exp": "2075297148"}ABDCE')
         jwt = jwtio_header + "." + payload.decode() + "." + jwtio_signature
 
-        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidSignature")
+        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidJWSSignature")
 
     def test_payload_does_not_contain_exp(self):
         valid_token_no_exp = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkVEQ1JSTSJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibm" \
@@ -277,7 +277,7 @@ class TestTokenHelper:
                                            b'"exp": "2075297148"}')
         jwt = jwtio_header + "." + payload.decode() + "." + jwtio_signature
 
-        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidSignature")
+        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidJWSSignature")
 
     def test_payload_contains_more_than_one_exp(self):
         payload = base64.urlsafe_b64encode(b'{"user":"jimmy",'
@@ -286,7 +286,7 @@ class TestTokenHelper:
                                            b'"exp": "2075297148"}')
         jwt = jwtio_header + "." + payload.decode() + "." + jwtio_signature
 
-        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidSignature")
+        self.assert_in_decode_signed_jwt_exception(jwt, "InvalidJWSSignature")
 
     def assert_in_decode_signed_jwt_exception(self, jwe, error):
         with pytest.raises(InvalidTokenException) as ite:
