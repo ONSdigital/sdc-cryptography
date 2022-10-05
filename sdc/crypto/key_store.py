@@ -61,7 +61,7 @@ class KeyStore:
             key = self.keys[kid]
             if key.purpose != purpose or key.key_type != key_type:
                 raise InvalidTokenException
-        except(KeyError, InvalidTokenException):
+        except (KeyError, InvalidTokenException):
             raise InvalidTokenException("Invalid {} Key Identifier [{}] for Purpose [{}]".format(key_type, kid, purpose))
         else:
             return key
