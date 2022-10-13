@@ -1,5 +1,8 @@
 ### Unreleased
 
+### 1.1.1
+- jwcrypto 1.4
+
 ### 1.1.0
 - Support selecting key from the key store by service name
 - Deprecate Travis CI integration
