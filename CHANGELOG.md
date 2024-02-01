@@ -1,5 +1,8 @@
 ### Unreleased
 
+### 1.1.3
+- jwcrypto 1.5.1
+
 ### 1.1.2
 - cryptography 41.0.0
 
