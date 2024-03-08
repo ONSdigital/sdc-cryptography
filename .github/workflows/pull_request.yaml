@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install Pipenv
-        run: pip install pipenv==2020.11.15
+        run: pip install pipenv==2023.12.1
       - name: Cache virtualenv
         id: cache-virtualenv
         uses: actions/cache@v2
@@ -43,7 +43,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install pipenv
-        run: pip install pipenv==2020.11.15
+        run: pip install pipenv==2023.12.1
       - name: Cache virtualenv
         id: cache-virtualenv
         uses: actions/cache@v2
