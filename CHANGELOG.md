@@ -1,6 +1,6 @@
 ### Unreleased
 
-### 1.1.5
+### 1.2.0
 - Update packages to latest versions
 - Add support for Py 3.11/3.12
 
@@ -30,7 +30,7 @@
 
 ### 0.4.0 2019-07-17
 - Update pyyaml due to CVE-2017-18342
-- Python 3.4 is no longer supported; the miniumum supported Python version is 3.5
+- Python 3.4 is no longer supported; the minimum supported Python version is 3.5
 
 ### 0.3.0 2018-12-19
 - Create public key IDs more consistently
