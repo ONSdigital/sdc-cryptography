@@ -1,7 +1,8 @@
 ### Unreleased
 
 ### 1.1.5
-- jwcrypto 1.5.6
+- Update packages to latest versions
+- Add support for Py 3.11/3.12
 
 ### 1.1.4
 - cryptography 42.0.4
