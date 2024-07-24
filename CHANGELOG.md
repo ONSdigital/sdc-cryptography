@@ -1,5 +1,8 @@
 ### Unreleased
 
+### 1.2.1
+- Update cryptography to 43.0.0
+
 ### 1.2.0
 - Update packages to latest versions
 - Add support for Py 3.11/3.12
