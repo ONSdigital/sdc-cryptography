@@ -6,9 +6,10 @@ on:
 
 jobs:
   build-and-publish:
+    permissions:
+      contents: read
     name: Build and publish distribution to PyPI
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.9
