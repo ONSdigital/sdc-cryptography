@@ -5,11 +5,10 @@ on:
     branches:
       - "master"
 
-permissions:
-  contents: read
-
 jobs:
   python-dependencies:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -34,6 +33,8 @@ jobs:
         run: pipenv install --dev
 
   test-unit:
+    permissions:
+      contents: read
     needs: python-dependencies
     runs-on: ubuntu-latest
     strategy:
