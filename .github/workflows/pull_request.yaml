@@ -24,7 +24,7 @@ jobs:
         run: pip install pipenv==2023.12.1
       - name: Cache virtualenv
         id: cache-virtualenv
-        uses: actions/cache@v4
+        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
         with:
           path: ~/.local/share/virtualenvs/
           key: ${{ runner.os }}-${{ matrix.python-version }}-virtualenvs-${{ hashFiles('Pipfile.lock') }}
