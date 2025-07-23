@@ -1,5 +1,8 @@
 ### Unreleased
 
+### 1.2.2
+- Update cryptography to 44.0.1
+
 ### 1.2.1
 - Update cryptography to 43.0.0
 
