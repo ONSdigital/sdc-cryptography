@@ -1,16 +1,17 @@
 
-.PHONY: build clean sdist test
+.PHONY: install build clean test
+
+install:
+	poetry install --with test
 
 build:
-	pipenv install --dev
+	poetry build
 
 clean:
 	rm -rf sdc/crypto/doc/html
-	rm -v dist/sdc-cryptography-*.tar.gz
-
-sdist:
-	python setup.py sdist
+	rm -rf dist/sdc-cryptography-*.tar.gz
+	rm -rf dist/sdc-cryptography-*.whl
 
 test:
-	flake8 .
-	pytest -v --cov-report term-missing --cov sdc.crypto --cov-fail-under=87
+	poetry run flake8 .
+	poetry run pytest -v --cov-report term-missing --cov sdc.crypto --cov-fail-under=87
