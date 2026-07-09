@@ -1,3 +1,38 @@
+[tool.poetry]
+name = "sdc-cryptography"
+version = "1.3.0"
+description = "A shared library for SDC services that use JWT with JWE"
+authors = ["ONS"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/ONSdigital/sdc-cryptography"
+classifiers = [
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.10",
+    "License :: OSI Approved :: MIT License",
+]
+packages = [
+    { include = "sdc" }
+]
+
+[tool.poetry.scripts]
+generate-keys = "sdc.crypto.scripts.generate_keys:main"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+cryptography = "*"
+jwcrypto = "*"
+PyYAML = "*"
+
+[tool.poetry.group.test.dependencies]
+pytest = "*"
+pytest-cov = "*"
+flake8 = "*"
+
 [build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta:__legacy__"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

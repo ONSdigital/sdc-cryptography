@@ -1,5 +1,10 @@
 ### Unreleased
 
+### 1.3.0
+- Migrate to poetry
+- Add support for Python 3.13 and 3.14
+- Remove support for Python 3.9 (not supported by Poetry)
+
 ### 1.2.3
 - Update cryptography to 48.0.1
 
