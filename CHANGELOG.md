@@ -1,5 +1,8 @@
 ### Unreleased
 
+### 1.4.0
+- Update pyca/cryptography to 50.0.0 due to CVE-2026-69247
+
 ### 1.3.0
 - Migrate to poetry
 - Add support for Python 3.13 and 3.14
